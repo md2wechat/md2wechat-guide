@@ -33,12 +33,12 @@
 
 ```yaml
 api:
-  key: "sk-your-api-key-here"
+  md2wechat_key: "sk-your-api-key-here"
   endpoint: "https://api.md2wechat.app/v1"  # 默认，无需修改
 
 wechat:
-  app_id: "your-wechat-app-id"
-  app_secret: "your-wechat-app-secret"
+  appid: "your-wechat-app-id"
+  secret: "your-wechat-app-secret"
 ```
 
 验证配置是否生效：
@@ -96,9 +96,9 @@ jobs:
         run: npm install -g @geekjourneyx/md2wechat
       - name: Publish article
         env:
-          MD2WECHAT_API_KEY: ${{ secrets.MD2WECHAT_API_KEY }}
-          WECHAT_APP_ID: ${{ secrets.WECHAT_APP_ID }}
-          WECHAT_APP_SECRET: ${{ secrets.WECHAT_APP_SECRET }}
+          MD2WECHAT_KEY: ${{ secrets.MD2WECHAT_KEY }}
+          WECHAT_APPID: ${{ secrets.WECHAT_APPID }}
+          WECHAT_SECRET: ${{ secrets.WECHAT_SECRET }}
         run: md2wechat convert articles/${{ github.event.head_commit.message }}.md --draft
 ```
 
