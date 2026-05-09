@@ -1,6 +1,6 @@
 # md2wechat API 接入指南
 
-> 解锁全部 43 个排版模块 + 40+ 专业主题。本指南帮你从免费 AI 模式升级到完整 API 模式。
+> 解锁全部 40+ 排版模块 + 48 套专业主题。本指南帮你配置 API Key，启用完整 API 模式。
 
 → 回到 [指南目录](./README.md)
 
@@ -10,8 +10,8 @@
 
 | 特性 | AI 模式（免费） | API 模式（订阅） |
 |------|---------------|---------------|
-| 主题数量 | 3 个基础主题 | 40+ 专业主题 |
-| 排版模块 | 标准 Markdown | 全部 43 个模块 |
+| 主题数量 | 3 个基础主题 | 48 套专业主题 |
+| 排版模块 | 标准 Markdown | 全部 40+ 个模块 |
 | AI 配图 | ❌ | ✅ |
 | 批量发布 | ❌ | ✅ |
 | 优先支持 | ❌ | ✅ |
@@ -20,9 +20,11 @@
 
 ## 申请 API 访问权限
 
-1. **访问** [md2wechat.app](https://md2wechat.app) 注册账号
-2. **选择订阅计划**（个人版 / 团队版）
-3. **获取 API Key** — 在账户设置页面生成
+API Key 由管理员手动发放，暂不支持自助注册。申请方式：
+
+1. **访问** [md2wechat.cn](https://www.md2wechat.cn) 了解功能
+2. **扫描主 README 中的二维码** — 关注公众号后私信「API咨询」
+3. **收到 `wme2_` 前缀的 Key** — 格式示例：`wme2_xxxxxxxx`
 4. **配置到本地** — 写入配置文件（见下方）
 
 ---
@@ -33,8 +35,8 @@
 
 ```yaml
 api:
-  md2wechat_key: "sk-your-api-key-here"
-  endpoint: "https://api.md2wechat.app/v1"  # 默认，无需修改
+  md2wechat_key: "wme2_your-api-key-here"
+  endpoint: "https://www.md2wechat.cn/api"  # 默认，无需修改
 
 wechat:
   appid: "your-wechat-app-id"
