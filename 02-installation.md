@@ -76,6 +76,21 @@ go install github.com/geekjourneyx/md2wechat-skill/cmd/md2wechat@v2.1.0
 
 ---
 
+## 方式六：源码编译
+
+适合需要定制化修改或参与贡献的开发者。
+
+**前置条件**：Go 1.21+
+
+```bash
+git clone https://github.com/geekjourneyx/md2wechat-skill.git
+cd md2wechat-skill
+go build -o md2wechat ./cmd/md2wechat
+sudo mv md2wechat /usr/local/bin/
+```
+
+---
+
 ## 验证安装
 
 ```bash
@@ -125,7 +140,7 @@ npm uninstall -g @geekjourneyx/md2wechat
 
 ---
 
-→ 下一步：[快速上手](./01-quick-start.md) | [主题与样式](./03-themes-and-styles.md)
+→ 上一步：[快速上手](./01-quick-start.md) ｜ 下一步：[主题与样式](./03-themes-and-styles.md)
 
 <div align="center">
 
