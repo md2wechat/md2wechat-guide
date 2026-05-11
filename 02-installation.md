@@ -97,7 +97,7 @@ sudo mv md2wechat /usr/local/bin/
 md2wechat version --json
 ```
 
-Expected output: `{"version":"2.1.0","go_version":"go1.26.1", ...}`
+Expected output: `{"version":"2.2.0","go_version":"go1.26.1", ...}`
 
 如果提示 `command not found`：确认安装路径在 `PATH` 中，重新打开终端后重试。
 

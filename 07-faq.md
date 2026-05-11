@@ -99,6 +99,16 @@ npm update -g @geekjourneyx/md2wechat
 
 ---
 
+## 五、授权与商业使用
+
+**Q: md2wechat 可以免费商业使用吗？**
+
+v2.2.0 起，许可证从 MIT 升级为 Source Available License（BUSL 1.1 为基础）。个人使用、学习、非商业项目、开源贡献**免费无需授权**。SaaS 集成、客户交付、品牌替换、白标等商业用途需要书面商业授权，联系 skrphper@gmail.com 或通过公众号「极客杰尼」咨询。
+
+历史版本（MIT）不受影响，2030-01-01 后自动转为 Apache 2.0。
+
+---
+
 → 回到 [指南目录](./README.md) · 查看 [API 接入指南](./06-api-guide.md)
 
 <div align="center">

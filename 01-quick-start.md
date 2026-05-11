@@ -27,7 +27,7 @@ npm install -g @geekjourneyx/md2wechat
 md2wechat version --json
 ```
 
-Expected output: `{"version":"2.1.0", ...}`
+Expected output: `{"version":"2.2.0", ...}`
 
 > 其他安装方式（install.sh / Go / 二进制）见 [安装指南](./02-installation.md)
 
