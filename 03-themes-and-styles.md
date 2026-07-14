@@ -1,107 +1,103 @@
-# md2wechat 主题与样式指南
+# 主题发现与选择
 
-> 40+ 专业主题，微信渲染精调。本指南帮你快速找到适合自己风格的主题。
-
-→ 回到 [指南目录](./README.md)
-
----
-
-## 主题系列概览
-
-md2wechat 提供 4 大系列主题：
-
-| 系列 | 风格描述 | 适合内容 |
-|------|---------|---------|
-| **Minimal** | 极简、大量留白、字体主导 | 深度思考、个人品牌 |
-| **Focus** | 专注正文、减少装饰 | 教程、指南、干货 |
-| **Elegant** | 精致排版、温和色调 | 生活方式、人文 |
-| **Bold** | 强对比、视觉冲击 | 观点、热点、营销 |
-
-完整主题预览：[theme-gallery](https://md2wechat.app/theme-gallery)
-
----
-
-## 如何指定主题
-
-**在命令行中指定：**
+主题目录会随版本变化。运行 discovery 命令获取当前可选项：
 
 ```bash
-md2wechat convert article.md --theme minimal-dark --draft
+md2wechat themes list --json
+md2wechat themes show default --json
 ```
 
-**在 Markdown 文件头部声明（frontmatter）：**
+核验基线：`v3.1.0`，2026-07-14。当前发现结果包含 53 个目录条目和 52 个可选主题；可选项中有 48 个 API 主题、4 个 AI 主题。
 
-```yaml
----
-theme: elegant-serif
----
+## API 模式主题
 
-# 文章标题
-正文内容...
-```
+常用主题示例：
 
-文件头部声明优先级高于命令行参数。
+| 主题 | 适合先测试的内容 |
+|---|---|
+| `default` | 基线兼容性 |
+| `minimal-blue` | 简洁教程和说明文 |
+| `focus-navy` | 重点明确的长文 |
+| `elegant-gold` | 人文、品牌和评论内容 |
+| `bold-red` | 发布、活动和强信息层级 |
+| `github-readme` | 技术文章 |
+| `wechat-native` | 接近公众号原生阅读习惯的内容 |
 
----
-
-## 常用主题示例
-
-**Minimal Dark（深色极简）：**
+使用前查看真实详情：
 
 ```bash
-md2wechat convert article.md --theme minimal-dark
+md2wechat themes show elegant-gold --json
 ```
 
-**Elegant Serif（优雅衬线）：**
+预览和转换：
 
 ```bash
-md2wechat convert article.md --theme elegant-serif
+md2wechat preview article.md --mode api --theme elegant-gold -o article.preview.html
+md2wechat convert article.md --mode api --theme elegant-gold -o article.html --json
 ```
 
-**Focus Mono（专注等宽）：**
+API 模式需要 `MD2WECHAT_API_KEY`。
+
+## AI 模式主题
+
+当前可选项：
+
+- `autumn-warm`
+- `spring-fresh`
+- `ocean-calm`
+- `custom`
+
+示例：
 
 ```bash
-md2wechat convert article.md --theme focus-mono
+md2wechat convert article.md --mode ai --theme autumn-warm --json
 ```
 
----
-
-## 预览主题效果
-
-本地预览（不推送）：
+`custom` 主题需要配合 `--custom-prompt`。AI 模式返回的内容需要按宿主 Agent 的协议处理，执行前读取：
 
 ```bash
-md2wechat preview article.md --theme minimal-dark
+md2wechat skills read md2wechat --json
 ```
 
-浏览器会打开预览页面，可实时对比不同主题效果。
+## 选择方法
 
----
+1. 先用 `default` 验证内容和图片。
+2. 通过 `themes list` 找到当前可选主题。
+3. 用 `themes show` 核对类型和说明。
+4. 为目标主题生成本地预览。
+5. 在手机宽度下检查标题、引用、代码、表格和图片。
+6. 通过后再输出正式 HTML 或创建草稿。
 
-## 主题 + 高级排版组合
+## 字号与背景
 
-主题控制**视觉风格**，高级排版模块控制**内容结构**。两者独立，可自由组合：
+API 模式支持：
 
 ```bash
-# elegant-serif 主题 + hero / verdict 等排版模块
-md2wechat convert article.md --theme elegant-serif --draft
+md2wechat preview article.md \
+  --theme minimal-blue \
+  --font-size medium \
+  --background-type none \
+  -o article.preview.html
 ```
 
-→ 高级排版模块详见 [高级排版指南](./04-advanced-typesetting.md)
+字号可选 `small`、`medium`、`large`；背景可选 `default`、`grid`、`none`。
 
----
+## 常见错误
 
-> **注意**：多主题能力（40+ 主题）为 API 模式专属。AI 模式（免费）仅支持 3 个基础主题。  
-> 申请 API 访问权限见 [API 接入指南](./06-api-guide.md)
+### 主题不存在
 
----
+```bash
+md2wechat themes list --json
+```
 
-→ 下一步：[高级排版模块](./04-advanced-typesetting.md)
+从输出复制主题 `name`，不要根据系列名称自行拼接。
 
-<div align="center">
+### 模式和主题不匹配
 
-[指南目录](./README.md) · [主工具](https://github.com/geekjourneyx/md2wechat-skill) · [反馈](https://github.com/md2wechat/md2wechat-guide/issues)
+先运行：
 
-</div>
+```bash
+md2wechat themes show THEME_NAME --json
+```
 
----
+按输出中的主题类型选择 `--mode api` 或 `--mode ai`。

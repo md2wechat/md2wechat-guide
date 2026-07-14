@@ -1,120 +1,180 @@
-# md2wechat 常见问题 FAQ
+# 常见问题
 
-> 遇到问题？这里收录了最常见的 80% 问题和解决方案。
+核验版本：md2wechat `v3.1.0`，2026-07-14。
 
-→ 回到 [指南目录](./README.md)
+## 找不到 `md2wechat`
 
----
-
-## 一、安装问题
-
-**Q: `brew install` 失败，提示 tap 不存在？**
+检查：
 
 ```bash
-# 先手动添加 tap，再安装
-brew tap geekjourneyx/tap
-brew install md2wechat
+command -v md2wechat
 ```
 
-**Q: `npm install -g` 后找不到 `md2wechat` 命令？**
+若通过固定版本安装器安装：
 
 ```bash
-# 检查 npm 全局 bin 路径是否在 PATH 中
-npm config get prefix
-# 将输出路径下的 bin 目录加入 PATH
-export PATH="$(npm config get prefix)/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+md2wechat version --json
 ```
 
----
+Windows 使用：
 
-## 二、微信授权问题
+```powershell
+Get-Command md2wechat
+```
 
-**Q: 推送时提示 "invalid credential"？**
-
-检查 `~/.config/md2wechat/config.yaml` 中的 `app_id` 和 `app_secret` 是否正确，并确认在微信公众平台已开启"接口权限"。
-
-**Q: 推送成功但草稿箱看不到文章？**
-
-微信草稿箱有延迟，通常 1–3 分钟后刷新可见。若超过 10 分钟未出现，检查公众号类型是否为订阅号或服务号（个人订阅号无草稿箱接口权限）。
-
----
-
-## 三、排版渲染问题
-
-**Q: Markdown 表格在微信中显示错乱？**
-
-微信编辑器对 HTML 表格支持有限。建议改用 `:::comparison` 排版模块（API 模式），或将表格转为图片插入。
-
-**Q: 代码块颜色丢失？**
-
-微信不支持 `<style>` 标签内的部分 CSS 属性。md2wechat 已针对微信做了兼容处理，若仍出现问题，尝试切换主题：
+## 版本仍然很旧
 
 ```bash
-md2wechat convert article.md --theme focus-mono --draft
+command -v md2wechat
+md2wechat version --json
 ```
 
----
-
-## 四、主题与模块问题
-
-**Q: 我只能看到 3 个主题，40+ 主题在哪里？**
-
-40+ 专业主题需要 API 模式。当前 AI 模式（免费）仅支持 3 个基础主题。申请方式见 [API 接入指南](./06-api-guide.md)。
-
-**Q: `:::hero` 语法不生效，原样输出了？**
-
-`:::blocktype` 高级排版模块为 API 模式专属。免费 AI 模式下会原样输出 `:::` 语法块。
-
----
-
-## 五、API 模式问题
-
-**Q: `md2wechat config check` 提示 API Key invalid？**
-
-1. 确认 Key 已复制完整（以 `sk-` 开头）
-2. 检查配置文件路径是否正确：`~/.config/md2wechat/config.yaml`
-3. 运行 `md2wechat config init` 重新初始化，再粘贴 Key
-
-**Q: API 模式下图片生成很慢？**
-
-AI 配图（`--cover --images`）需调用外部图片 API，通常耗时 15–45 秒。可单独先用 `--cover` 生成封面，再逐步启用段落配图。
-
----
-
-## 六、其他问题
-
-**Q: 如何更新到最新版本？**
+确认 shell 调用路径与当前安装方式一致。升级后重新打开终端，再读取内置协议：
 
 ```bash
-# Homebrew
-brew upgrade md2wechat
-
-# npm
-npm update -g @geekjourneyx/md2wechat
+md2wechat skills read md2wechat --json
 ```
 
-**Q: 在哪里提交 Bug 或功能建议？**
+## 配置无法通过
 
-欢迎在 [GitHub Issues](https://github.com/geekjourneyx/md2wechat-skill/issues) 提交，或加入微信交流群（见主 README）。
+```bash
+md2wechat config show --json
+md2wechat config validate --json
+md2wechat doctor --json
+```
 
----
+配置优先级为环境变量、配置文件、默认值。旧环境变量可能覆盖已经修改的文件。
 
-## 五、授权与商业使用
+## API 模式提示缺少 Key
 
-**Q: md2wechat 可以免费商业使用吗？**
+症状：`MISSING_API_KEY` 或 `MD2WECHAT_API_KEY is required`。
 
-v2.2.0 起，许可证从 MIT 升级为 Source Available License（BUSL 1.1 为基础）。个人使用、学习、非商业项目、开源贡献**免费无需授权**。SaaS 集成、客户交付、品牌替换、白标等商业用途需要书面商业授权，联系 skrphper@gmail.com 或通过公众号「极客杰尼」咨询。
+检查：
 
-历史版本（MIT）不受影响，2030-01-01 后自动转为 Apache 2.0。
+```bash
+test -n "$MD2WECHAT_API_KEY" && echo configured
+md2wechat doctor --json
+```
 
----
+设置 `MD2WECHAT_API_KEY`，或在配置文件中填写 `api.md2wechat_key`。不要在 Issue 中输出真实值。
 
-→ 回到 [指南目录](./README.md) · 查看 [API 接入指南](./06-api-guide.md)
+## 主题不存在
 
-<div align="center">
+```bash
+md2wechat themes list --json
+md2wechat themes show THEME_NAME --json
+```
 
-[指南目录](./README.md) · [主工具](https://github.com/geekjourneyx/md2wechat-skill) · [反馈](https://github.com/md2wechat/md2wechat-guide/issues)
+从 discovery 输出复制主题名。v2 文档中的部分名称已经移除，迁移表见 [v3 迁移](08-migration-v3.md)。
 
-</div>
+## 高级排版块无法渲染
 
----
+```bash
+md2wechat layout show MODULE_NAME --json
+md2wechat layout validate --file article.md --json
+```
+
+重点检查：
+
+- 模块名是否存在
+- `body_format` 是否匹配
+- 必填字段是否齐全
+- JSON、rows、fields 等格式是否混用
+- 开始和结束标记是否都是三冒号
+
+## `--draft` 提示缺少封面
+
+草稿必须提供本地封面或现有素材 ID：
+
+```bash
+md2wechat convert article.md --draft --cover cover.jpg --json
+```
+
+或：
+
+```bash
+md2wechat convert article.md --draft --cover-media-id MEDIA_ID --json
+```
+
+## 微信凭证缺失
+
+症状：`WECHAT_APPID is required`、`WECHAT_SECRET is required`。
+
+检查：
+
+```bash
+md2wechat doctor --json
+md2wechat config wechat-accounts --json
+```
+
+配置 `WECHAT_APPID` 与 `WECHAT_SECRET`，或使用配置文件中的 `wechat` 字段。日志和 Issue 必须脱敏。
+
+## 多公众号账号无法执行副作用
+
+```bash
+md2wechat config wechat-accounts --json
+md2wechat inspect article.md --draft --cover cover.jpg --wechat-account ACCOUNT --strict --json
+```
+
+命名账号执行上传或草稿操作时需要有效的 `MD2WECHAT_API_KEY`。先确认账号名和默认账号解析结果。
+
+## 微信提示 IP 不在白名单
+
+先确认运行机器的公网出口 IP，并把它加入微信后台白名单。家庭网络、动态云环境和普通 CI 的出口可能变化。
+
+已开通固定出口服务时，使用服务方提供的完整 URL：
+
+```yaml
+wechat:
+  proxy_url: "https://wechat-egress-url-provided-by-service.example"
+```
+
+也可以临时设置：
+
+```bash
+export WECHAT_PROXY_URL="https://wechat-egress-url-provided-by-service.example"
+```
+
+该配置只影响微信上传、草稿和图片消息等副作用。启用后需要有效的 `MD2WECHAT_API_KEY`。微信后台白名单填写服务方提供的出口 IP，不自行猜测代理端口或地址。
+
+## 图片计划没有生成图片
+
+`--plan --json` 返回 `IMAGE_PLAN_READY`，输出供宿主 Agent 使用。宿主 Agent 仍需调用自己的 Image Gen 工具并保存文件。
+
+```bash
+md2wechat generate_cover --article article.md --plan --json
+```
+
+## 直接图片生成失败
+
+```bash
+md2wechat providers list --json
+md2wechat prompts list --json
+md2wechat doctor --json
+```
+
+检查 Provider、模型和 `IMAGE_API_KEY`。直接模式会调用外部服务，可能产生费用。
+
+## 如何只检查，不创建草稿
+
+```bash
+md2wechat inspect article.md --json
+md2wechat advise article.md --json
+md2wechat layout validate --file article.md --json
+md2wechat preview article.md -o article.preview.html
+```
+
+这些命令不创建微信草稿。`doctor` 也不调用远程 API。
+
+## 如何报告问题
+
+在 [Guide Issues](https://github.com/md2wechat/md2wechat-guide/issues) 提供：
+
+- `md2wechat version --json`
+- 操作系统和安装方式
+- 脱敏命令与错误码
+- 可以公开的最小 Markdown 示例
+- 已执行的检查命令
+
+删除 AppID、AppSecret、API Key、Cookie、Token 和未发布正文。

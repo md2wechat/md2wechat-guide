@@ -1,142 +1,153 @@
-# md2wechat 快速上手 — 5 分钟跑通主流程
+# 快速开始
 
-> **目标**：完成安装 → 配置微信凭证 → 转换并推送第一篇草稿。  
-> **前置条件**：macOS / Linux / Windows，无需编程背景，会用命令行即可。
+目标：生成一份可检查的微信 HTML。创建公众号草稿属于可选步骤。
 
-→ 回到 [指南目录](./README.md)
+核验版本：md2wechat `v3.1.0`，2026-07-14。
 
----
-
-## 第一步：安装 md2wechat
-
-**macOS（推荐）：**
-
-```bash
-brew install geekjourneyx/tap/md2wechat
-```
-
-**npm（跨平台，已有 Node 环境）：**
+## 1. 安装并确认版本
 
 ```bash
 npm install -g @geekjourneyx/md2wechat
-```
-
-**验证安装成功：**
-
-```bash
 md2wechat version --json
+md2wechat capabilities --json
+md2wechat skills read md2wechat --json
 ```
 
-Expected output: `{"version":"2.2.0", ...}`
+`skills read` 读取当前二进制内置的 Agent 操作协议，不需要联网获取另一份 Skill 文件。
 
-> 其他安装方式（install.sh / Go / 二进制）见 [安装指南](./02-installation.md)
-
----
-
-## 第二步：配置微信凭证（只需一次）
+## 2. 初始化配置
 
 ```bash
 md2wechat config init
+md2wechat config show --json
+md2wechat config validate --json
+md2wechat doctor --json
 ```
 
-该命令在 `~/.config/md2wechat/config.yaml` 创建配置文件。  
-打开文件，填入以下字段：
+默认配置路径：
 
-```yaml
-wechat:
-  appid: "wx_your_appid_here"
-  secret: "your_secret_here"
+```text
+~/.config/md2wechat/config.yaml
 ```
 
-**AppID / Secret 获取步骤：**
+API 模式需要 `MD2WECHAT_API_KEY` 或配置项 `api.md2wechat_key`。创建微信草稿还需要 `WECHAT_APPID` 和 `WECHAT_SECRET`，也可以写入配置文件。
 
-1. 登录 [微信公众平台](https://mp.weixin.qq.com) → 「设置与开发」→「基本配置」
-2. 复制 `AppID（应用ID）` 和 `AppSecret`
-3. 同页面配置 **IP 白名单**（必须）——添加你本机或服务器的公网 IP
+不要把凭证写进文章、示例、Issue 或 Git 仓库。
 
-> AppSecret 只显示一次，请立即复制保存。  
-> IP 白名单配置详见 [微信凭证指南](https://github.com/geekjourneyx/md2wechat-skill/blob/main/docs/WECHAT-CREDENTIALS.md)
+## 3. 准备文章
 
----
-
-## 第三步：转换第一篇文章
-
-准备一个 Markdown 文件，例如 `article.md`：
+创建 `article.md`：
 
 ```markdown
-# 我的第一篇公众号文章
+---
+title: 第一次使用 md2wechat
+author: 你的名字
+digest: 从检查到预览的最短流程
+---
 
-这是用 md2wechat 排版的第一篇文章。
+# 第一次使用 md2wechat
 
-## 核心观点
+这是一段正文。
 
-AI 时代，写作工具应该越来越简单。
+## 要点
+
+- 先检查
+- 再预览
+- 确认后转换
 ```
 
-**预览（本地，不触发上传）：**
+## 4. 检查文章
 
 ```bash
-md2wechat preview article.md
+md2wechat inspect article.md --json
+md2wechat advise article.md --json
+md2wechat layout validate --file article.md --json
 ```
 
-浏览器会打开本地预览页面，确认排版效果。
+- `inspect` 返回解析后的标题、摘要和发布准备度。
+- `advise` 给出确定性的改进建议，不修改文件。
+- `layout validate` 检查高级排版块的字段和结构。
 
-**推送微信草稿箱：**
+需要把检查错误用于 CI 时：
 
 ```bash
-md2wechat convert article.md --draft
+md2wechat inspect article.md --strict --json
 ```
 
-Expected: `✓ Draft created successfully`
+发现 error 级问题时，`--strict` 使用退出码 2。
 
-登录公众号后台，在「草稿箱」中即可看到这篇文章。
-
----
-
-## 全流程示例（4 步从想法到草稿箱）
+## 5. 选择主题并预览
 
 ```bash
-# 1. AI 生成文章（需配置 AI key）
-md2wechat write --style dan-koe
-
-# 2. 去除 AI 痕迹
-md2wechat humanize article.md
-
-# 3. AI 生成封面图
-md2wechat generate_cover --article article.md
-
-# 4. 转换并推送草稿
-md2wechat convert article.md --draft --cover cover.jpg
+md2wechat themes list --json
+md2wechat themes show default --json
+md2wechat preview article.md --theme default -o article.preview.html
 ```
 
----
+打开 `article.preview.html`，检查标题、段落、代码、图片和手机宽度下的阅读效果。
 
-## 在 Claude Code / Codex 中使用
+## 6. 转换 HTML
 
-md2wechat 是 Agent-native 工具，可以直接用自然语言驱动：
-
-```
-"用 Dan Koe 风格写一篇关于 AI 时代独立开发者的文章，生成封面，推送到微信草稿箱"
+```bash
+md2wechat convert article.md --theme default -o article.html --json
 ```
 
-Claude Code 会自动调用 CLI 完成全流程。  
-→ 安装 Claude Code Skill 见 [主仓库](https://github.com/geekjourneyx/md2wechat-skill#coding-agent)
+需要让转换阶段只生成预览且不上传图片：
 
----
+```bash
+md2wechat convert article.md --preview --theme default --json
+```
 
-## 遇到问题？
+## 7. 可选：创建微信草稿
 
-- `command not found: md2wechat` → 见 [安装指南](./02-installation.md)
-- `45002 内容超限` → 长文章拆分，或使用简洁主题
-- 草稿推送失败 → 检查 IP 白名单配置
-- 更多问题 → [常见问题](./07-faq.md)
+先准备本地封面 `cover.jpg`，再按草稿目标检查：
 
----
+```bash
+md2wechat inspect article.md --draft --cover cover.jpg --strict --json
+```
 
-→ 下一步：[主题与样式选择](./03-themes-and-styles.md) | [高级排版模块](./04-advanced-typesetting.md)
+确认目标账号和副作用后执行：
 
-<div align="center">
+```bash
+md2wechat convert article.md --draft --cover cover.jpg --json
+```
 
-[指南目录](./README.md) · [主工具](https://github.com/geekjourneyx/md2wechat-skill) · [反馈](https://github.com/md2wechat/md2wechat-guide/issues)
+已有微信封面素材 ID 时，可以使用：
 
-</div>
+```bash
+md2wechat convert article.md --draft --cover-media-id MEDIA_ID --json
+```
+
+`--cover` 与 `--cover-media-id` 不能同时使用。
+
+## 8. 可选：标题建议与 Brand Profile
+
+生成可交给 AI 的标题建议请求：
+
+```bash
+md2wechat title suggest article.md \
+  --target-reader "公众号创作者" \
+  --count 8 \
+  --hook-level 1 \
+  --json
+```
+
+初始化供 Agent 读取的作者资料：
+
+```bash
+md2wechat brand init
+md2wechat brand show
+```
+
+Brand Profile 位于 `~/.config/md2wechat/brand.md`。CLI 不解析其中内容，宿主 Agent 根据它理解语气、排版偏好和限制。
+
+## Agent 调用顺序
+
+```text
+version → capabilities → skills read → doctor
+→ inspect → advise → themes/layout discovery
+→ layout validate → preview → convert
+→ 用户确认后执行 upload 或 draft
+```
+
+Agent 不应在用户只要求排版、预览或检查时创建草稿。

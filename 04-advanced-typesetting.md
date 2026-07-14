@@ -1,178 +1,84 @@
-# md2wechat 高级排版指南
+# 高级排版语法
 
-> 43 个专业排版模块，让微信文章瞬间升级。本指南展示每类模块的语法和效果。
+高级排版使用 `:::module` 块。模块目录、字段和示例由 CLI 内置 catalog 提供。
 
-→ 回到 [指南目录](./README.md)
+核验基线：`v3.1.0`，2026-07-14。
 
----
+## 数字口径
 
-## 什么是高级排版模块？
+| 口径 | 当前值 | 用途 |
+|---|---:|---|
+| 主推场景条目 | 68 | Agent 根据文章任务选型 |
+| 主推语法名 | 53 | 写入 Markdown 的推荐模块名 |
+| 渲染语法能力 | 60 | 渲染层覆盖口径 |
+| 兼容模块 | 3 | 旧稿和特殊场景 |
+| 基础增强 | 4 | KaTeX、Mermaid 等基础能力 |
 
-md2wechat 在标准 Markdown 之上，提供 `:::blocktype` 语法，用于插入精美排版组件。
+这些数字对应不同对象。文档和对比内容必须带上完整口径。
 
-**基本语法：**
+## 发现模块
+
+```bash
+md2wechat layout list --json
+md2wechat layout show hero --json
+md2wechat layout show metrics --json
+```
+
+`layout show` 返回适用场景、禁用场景、字段、变体和可运行示例。写模块前先查看当前 spec。
+
+## 最小示例
 
 ```markdown
 :::hero
-# 大标题
-副标题文案
+variant: editorial
+eyebrow: 使用说明
+title: 先检查文章，再选择排版结构
+subtitle: 模块服务具体阅读任务
+tags: 检查 | 预览
 :::
 ```
 
-渲染后会生成对应的微信兼容 HTML 块。
+保存到 `article.md` 后验证：
 
----
-
-## 模块分类总览
-
-| 分类 | 模块名 | 用途 |
-|------|--------|------|
-| **视觉冲击** | hero, banner, cover | 文章顶部标题区 |
-| **内容结构** | steps, timeline, checklist | 步骤 / 流程 / 清单 |
-| **信息强调** | callout, tip, warning, quote | 提示块 / 引用 |
-| **数据展示** | stat, comparison, pricing | 统计 / 对比 / 定价 |
-| **互动感** | verdict, poll, cta | 观点 / 投票 / 行动号召 |
-| **媒体** | figure, gallery, video-cover | 图片 / 相册 / 视频封面 |
-
----
-
-## 一、视觉冲击类
-
-**hero — 文章主标题区：**
-
-```markdown
-:::hero
-# 2025 年最值得关注的 5 个 AI 工具
-每一个都改变了我的工作方式
-:::
+```bash
+md2wechat layout validate --file article.md --json
 ```
 
-**banner — 全宽横幅：**
+从标准输入验证：
 
-```markdown
-:::banner
-重磅发布！md2wechat v2.2 正式版
-支持 43 个排版模块 · 40+ 专业主题
-:::
+```bash
+printf '%s\n' ':::hero' 'title: 先检查文章' ':::' | md2wechat layout validate --stdin --json
 ```
 
----
+## 按任务选择
 
-## 二、内容结构类
+| 任务 | 可先查看的语法 |
+|---|---|
+| 开场和导读 | `hero`、`toc`、`part`、`cards` |
+| 判断和适用人群 | `verdict`、`audience-fit`、`myth-fact` |
+| 数据和证据 | `metrics`、`quote`、`cases`、`figure-caption` |
+| 对比和选择 | `compare`、`comparison-table`、`matrix` |
+| 操作步骤 | `steps`、`timeline`、`image-steps` |
+| 图片说明 | `image-text`、`image-compare`、`image-annotate` |
+| 收尾和后续动作 | `summary`、`checklist`、`cta`、`subscribe` |
 
-**steps — 分步骤：**
+这张表只提供入口。字段结构仍以 `layout show NAME --json` 为准。
 
-```markdown
-:::steps
-1. 安装 md2wechat CLI
-2. 初始化配置文件
-3. 写 Markdown，一键发布
-:::
+## 使用原则
+
+- 每个模块承担一个明确任务。
+- 先写内容，再选择模块。
+- 同一段不叠加多个表达相近的模块。
+- 对比、数据、案例和引用需要真实来源。
+- CTA 只在文章确实有后续动作时使用。
+- 模块通过验证后仍要检查手机端预览。
+
+## 验证顺序
+
+```bash
+md2wechat layout validate --file article.md --json
+md2wechat inspect article.md --json
+md2wechat preview article.md -o article.preview.html
 ```
 
-**timeline — 时间线：**
-
-```markdown
-:::timeline
-- 2023.01 — 项目立项
-- 2024.06 — 突破 1000 Star
-- 2025.05 — 发布高级排版 API
-:::
-```
-
----
-
-## 三、信息强调类
-
-**callout — 重要提示：**
-
-```markdown
-:::callout
-**微信限制**：单篇文章图片数量上限为 50 张，超出部分不会上传。
-:::
-```
-
-**warning — 警告：**
-
-```markdown
-:::warning
-修改 `app_secret` 后需重新授权，旧的 access_token 会立即失效。
-:::
-```
-
----
-
-## 四、数据展示类
-
-**stat — 数据统计：**
-
-```markdown
-:::stat
-- 2.1k GitHub Stars
-- 40+ 专业主题
-- 43 排版模块
-- 3 分钟上手
-:::
-```
-
-**comparison — 对比表：**
-
-```markdown
-:::comparison
-| 特性 | AI 模式 | API 模式 |
-|------|---------|---------|
-| 主题数量 | 3 | 40+ |
-| 排版模块 | 基础 | 全部 43 个 |
-| 价格 | 免费 | 订阅制 |
-:::
-```
-
----
-
-## 五、互动感类
-
-**verdict — 最终结论：**
-
-```markdown
-:::verdict
-**推荐指数：⭐⭐⭐⭐⭐**
-
-对于每周发布 2+ 篇公众号文章的创作者来说，md2wechat 是目前最节省时间的工具。
-:::
-```
-
-**cta — 行动号召：**
-
-```markdown
-:::cta
-立即体验 md2wechat → [免费下载](https://github.com/geekjourneyx/md2wechat-skill)
-:::
-```
-
----
-
-## 六、媒体类
-
-**figure — 图片说明：**
-
-```markdown
-:::figure
-![预览截图](./screenshot.png)
-*图：md2wechat 主题选择界面*
-:::
-```
-
----
-
-> **提示**：高级排版模块为 **API 模式专属**。AI 模式（免费）支持标准 Markdown 渲染。  
-> 申请 API 访问权限见 [API 接入指南](./06-api-guide.md)
-
----
-
-→ 下一步：[AI 配图功能](./05-ai-image.md)
-
-<div align="center">
-
-[指南目录](./README.md) · [主工具](https://github.com/geekjourneyx/md2wechat-skill) · [反馈](https://github.com/md2wechat/md2wechat-guide/issues)
-
-</div>
+`layout validate` 通过只说明语法符合当前 catalog，不能证明内容、证据或手机阅读效果已经合格。
