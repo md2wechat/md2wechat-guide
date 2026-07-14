@@ -1,121 +1,84 @@
-# md2wechat API 接入指南
+# API 接入
 
-> 解锁全部 40+ 排版模块 + 48 套专业主题。本指南帮你配置 API Key，启用完整 API 模式。
+公开稳定转换接口：`POST https://www.md2wechat.cn/api/convert`。
 
-→ 回到 [指南目录](./README.md)
+核验来源：[md2wechat API 文档](https://www.md2wechat.cn/api-docs)，2026-07-14。接口、鉴权和价格发生变化时，以该页面为准。
 
----
+## CLI 配置
 
-## AI 模式 vs API 模式
+```bash
+export MD2WECHAT_API_KEY="your_key"
+export MD2WECHAT_BASE_URL="https://www.md2wechat.cn"
 
-| 特性 | AI 模式（免费） | API 模式（订阅） |
-|------|---------------|---------------|
-| 主题数量 | 3 个基础主题 | 48 套专业主题 |
-| 排版模块 | 标准 Markdown | 全部 43 个模块 |
-| AI 配图 | ❌ | ✅ |
-| 批量发布 | ❌ | ✅ |
-| 优先支持 | ❌ | ✅ |
+md2wechat config validate --json
+md2wechat doctor --json
+```
 
----
-
-## 申请 API 访问权限
-
-API Key 由管理员手动发放，暂不支持自助注册。申请方式：
-
-1. **访问** [md2wechat.cn](https://www.md2wechat.cn) 了解功能
-2. **扫描主 README 中的二维码** — 关注公众号后私信「API咨询」
-3. **收到 `wme2_` 前缀的 Key** — 格式示例：`wme2_xxxxxxxx`
-4. **配置到本地** — 写入配置文件（见下方）
-
----
-
-## 配置 API Key
-
-编辑 `~/.config/md2wechat/config.yaml`：
+也可以写入 `~/.config/md2wechat/config.yaml`：
 
 ```yaml
 api:
-  md2wechat_key: "wme2_your-api-key-here"
-  endpoint: "https://www.md2wechat.cn/api"  # 默认，无需修改
-
-wechat:
-  appid: "your-wechat-app-id"
-  secret: "your-wechat-app-secret"
+  md2wechat_key: "your_key"
+  md2wechat_base_url: "https://www.md2wechat.cn"
 ```
 
-验证配置是否生效：
+不要把真实 Key 提交到 Git。
+
+## CLI 转换
 
 ```bash
-md2wechat config check
+md2wechat themes list --json
+md2wechat convert article.md \
+  --mode api \
+  --theme default \
+  --font-size medium \
+  --background-type none \
+  -o article.html \
+  --json
 ```
 
-预期输出：
-
-```
-✓ API Key: valid (plan: pro)
-✓ WeChat: connected (appid: wx****)
-✓ Themes: 40+ available
-✓ Modules: 43 available
-```
-
----
-
-## 使用完整功能
-
-配置完成后，所有高级功能自动解锁：
+## HTTP 请求
 
 ```bash
-# 使用专业主题
-md2wechat convert article.md --theme elegant-serif --draft
-
-# 使用高级排版模块（:::blocktype 语法）
-md2wechat convert article.md --draft
-
-# 同时开启 AI 配图
-md2wechat convert article.md --theme minimal-dark --cover --images --draft
+curl -X POST "https://www.md2wechat.cn/api/convert" \
+  -H "Content-Type: application/json" \
+  -H "Md2wechat-API-Key: YOUR_API_KEY" \
+  -d '{
+    "markdown": "# 标题\n\n这是一段正文。",
+    "theme": "default",
+    "fontSize": "medium",
+    "backgroundType": "none"
+  }'
 ```
 
----
+请求前从 [主题画廊](https://www.md2wechat.cn/theme-gallery) 或 `themes list` 获取主题 ID。
 
-## CI/CD 自动化发布
+## 请求字段
 
-在 GitHub Actions 中自动发布到微信公众号：
+| 字段 | 必填 | 说明 |
+|---|---|---|
+| `markdown` | 是 | Markdown 文本 |
+| `theme` | 否 | 主题 ID，默认 `default` |
+| `fontSize` | 否 | `small`、`medium`、`large` |
+| `backgroundType` | 否 | `default`、`grid`、`none` |
 
-```yaml
-# .github/workflows/publish.yml
-name: Publish to WeChat
+## 高级排版
 
-on:
-  push:
-    paths: ['articles/*.md']
+接口接受已部署渲染器支持的 `:::module` 语法。发送请求前在 CLI 中验证：
 
-jobs:
-  publish:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install md2wechat
-        run: npm install -g @geekjourneyx/md2wechat
-      - name: Publish article
-        env:
-          MD2WECHAT_KEY: ${{ secrets.MD2WECHAT_KEY }}
-          WECHAT_APPID: ${{ secrets.WECHAT_APPID }}
-          WECHAT_SECRET: ${{ secrets.WECHAT_SECRET }}
-        run: md2wechat convert articles/${{ github.event.head_commit.message }}.md --draft
+```bash
+md2wechat layout validate --file article.md --json
 ```
 
----
+## 错误定位
 
-> **问题或反馈**？欢迎在 [GitHub Issues](https://github.com/md2wechat/md2wechat-guide/issues) 提交。
+1. 先用 `theme: default` 和最小 Markdown 请求。
+2. 检查 HTTP 状态码和响应错误码。
+3. 运行 `md2wechat config validate --json`。
+4. 运行 `md2wechat doctor --json`。
+5. 检查 Key 是否放在 `Md2wechat-API-Key` 请求头。
+6. 检查请求体字段大小写和 JSON 转义。
 
----
+## CI 凭证
 
-→ 下一步：[常见问题 FAQ](./07-faq.md)
-
-<div align="center">
-
-[指南目录](./README.md) · [主工具](https://github.com/geekjourneyx/md2wechat-skill) · [反馈](https://github.com/md2wechat/md2wechat-guide/issues)
-
-</div>
-
----
+在 CI Secret 中保存 `MD2WECHAT_API_KEY`。日志只记录错误码、请求标识和脱敏环境信息，不输出请求头或完整未发布文章。
