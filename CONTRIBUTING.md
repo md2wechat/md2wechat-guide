@@ -18,11 +18,6 @@ Guide 只保存稳定任务路径。完整 CLI 行为以上游源码、Release �
 - 历史命令只写进 `08-migration-v3.md`。
 - 不加入固定产品介绍、评分、排名和推广段落。
 - 不改写上游完整命令参考，使用链接或 discovery 命令。
-
-本地检查：
-
-```bash
-bash scripts/verify-docs.sh
-```
+- 提交前逐一打开内部链接，并复核改动涉及的命令示例。
 
 产品代码问题请提交到 [md2wechat-skill](https://github.com/geekjourneyx/md2wechat-skill/issues)。
