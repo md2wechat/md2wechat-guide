@@ -30,7 +30,7 @@ command -v md2wechat
 md2wechat version --json
 ```
 
-确认 shell 调用路径与当前安装方式一致。升级后重新打开终端，再读取内置协议：
+确认 shell 调用路径与所用安装方式一致。升级后重新打开终端，再读取内置协议：
 
 ```bash
 md2wechat skills read md2wechat --json
@@ -165,7 +165,7 @@ md2wechat layout validate --file article.md --json
 md2wechat preview article.md -o article.preview.html
 ```
 
-这些命令不创建微信草稿。`doctor` 也不调用远程 API。
+`inspect`、`advise`、`layout validate` 和 `preview` 不创建微信草稿。`doctor` 也不调用远程 API。
 
 ## 如何报告问题
 

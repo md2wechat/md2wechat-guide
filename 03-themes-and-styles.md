@@ -1,13 +1,13 @@
 # 主题发现与选择
 
-主题目录会随版本变化。运行 discovery 命令获取当前可选项：
+主题目录会随版本变化。运行发现命令获取所装版本的可选项：
 
 ```bash
 md2wechat themes list --json
 md2wechat themes show default --json
 ```
 
-核验基线：`v3.1.0`，2026-07-14。当前发现结果包含 53 个目录条目和 52 个可选主题；可选项中有 48 个 API 主题、4 个 AI 主题。
+核验基线：`v3.1.0`，2026-07-14。该版本包含 53 个目录条目和 52 个可选主题；可选项中有 48 个 API 主题、4 个 AI 主题。
 
 ## API 模式主题
 
@@ -23,7 +23,7 @@ md2wechat themes show default --json
 | `github-readme` | 技术文章 |
 | `wechat-native` | 接近公众号原生阅读习惯的内容 |
 
-使用前查看真实详情：
+使用前查看主题详情：
 
 ```bash
 md2wechat themes show elegant-gold --json
@@ -40,7 +40,7 @@ API 模式需要 `MD2WECHAT_API_KEY`。
 
 ## AI 模式主题
 
-当前可选项：
+v3.1.0 可选项：
 
 - `autumn-warm`
 - `spring-fresh`
@@ -62,7 +62,7 @@ md2wechat skills read md2wechat --json
 ## 选择方法
 
 1. 先用 `default` 验证内容和图片。
-2. 通过 `themes list` 找到当前可选主题。
+2. 通过 `themes list` 找到所装版本的可选主题。
 3. 用 `themes show` 核对类型和说明。
 4. 为目标主题生成本地预览。
 5. 在手机宽度下检查标题、引用、代码、表格和图片。

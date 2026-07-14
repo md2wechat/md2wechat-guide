@@ -64,13 +64,11 @@ curl -X POST "https://www.md2wechat.cn/api/convert" \
 
 ## 高级排版
 
-接口接受当前渲染器支持的 `:::module` 语法。发送请求前在 CLI 中验证：
+接口接受已部署渲染器支持的 `:::module` 语法。发送请求前在 CLI 中验证：
 
 ```bash
 md2wechat layout validate --file article.md --json
 ```
-
-保存生成后的 Markdown 需要用户明确授权。自动化流程可以在临时目录生成副本，再把副本交给 API。
 
 ## 错误定位
 

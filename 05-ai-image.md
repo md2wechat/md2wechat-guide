@@ -13,7 +13,7 @@ md2wechat prompts show cover-default --json
 md2wechat prompts show infographic-default --json
 ```
 
-当前核验结果包含 6 个 Provider 和 32 个内置提示词。目录会变化，实际调用以 discovery 输出为准。
+v3.1.0 包含 6 个 Provider 和 32 个内置提示词。目录会变化，实际调用以发现命令输出为准。
 
 ## 计划模式
 

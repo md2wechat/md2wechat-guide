@@ -4,7 +4,7 @@ Guide 只保存稳定任务路径。完整 CLI 行为以上游源码、Release �
 
 ## 提交前准备
 
-1. 安装当前稳定版本。
+1. 安装准备核验的稳定版本。
 2. 记录 `md2wechat version --json` 输出。
 3. 用 `--help` 或 discovery 命令核对参数。
 4. 对高级排版示例运行 `layout validate`。

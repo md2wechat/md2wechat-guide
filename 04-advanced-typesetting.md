@@ -6,7 +6,7 @@
 
 ## 数字口径
 
-| 口径 | 当前值 | 用途 |
+| 口径 | 核验值 | 用途 |
 |---|---:|---|
 | 主推场景条目 | 68 | Agent 根据文章任务选型 |
 | 主推语法名 | 53 | 写入 Markdown 的推荐模块名 |
@@ -14,7 +14,7 @@
 | 兼容模块 | 3 | 旧稿和特殊场景 |
 | 基础增强 | 4 | KaTeX、Mermaid 等基础能力 |
 
-这些数字对应不同对象。文档和对比内容必须带上完整口径。
+引用数字时需要同时写出口径。
 
 ## 发现模块
 
@@ -24,7 +24,7 @@ md2wechat layout show hero --json
 md2wechat layout show metrics --json
 ```
 
-`layout show` 返回适用场景、禁用场景、字段、变体和可运行示例。写模块前先查看当前 spec。
+`layout show` 返回适用场景、禁用场景、字段、变体和可运行示例。写模块前先查看所装版本的 spec。
 
 ## 最小示例
 
@@ -62,7 +62,7 @@ printf '%s\n' ':::hero' 'title: 先检查文章' ':::' | md2wechat layout valida
 | 图片说明 | `image-text`、`image-compare`、`image-annotate` |
 | 收尾和后续动作 | `summary`、`checklist`、`cta`、`subscribe` |
 
-这张表只提供入口。字段结构仍以 `layout show NAME --json` 为准。
+字段结构以 `layout show NAME --json` 为准。
 
 ## 使用原则
 
@@ -81,4 +81,4 @@ md2wechat inspect article.md --json
 md2wechat preview article.md -o article.preview.html
 ```
 
-`layout validate` 通过只说明语法符合当前 catalog，不能证明内容、证据或手机阅读效果已经合格。
+`layout validate` 通过只说明语法符合所装版本的 catalog，不能证明内容、证据或手机阅读效果已经合格。

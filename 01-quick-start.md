@@ -13,7 +13,7 @@ md2wechat capabilities --json
 md2wechat skills read md2wechat --json
 ```
 
-`skills read` 读取当前二进制内置的 Agent 操作协议，不需要联网获取另一份 Skill 文件。
+`skills read` 读取所装二进制内置的 Agent 操作协议，不需要联网获取另一份 Skill 文件。
 
 ## 2. 初始化配置
 

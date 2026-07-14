@@ -1,10 +1,10 @@
 # 从 v2 迁移到 v3
 
-本页记录历史写法，方便定位旧脚本。除本页外，Guide 只使用 v3 命令。
+仅本页保留 v2 历史写法，用于定位旧脚本。Guide 其他页面只使用 v3 命令。
 
 核验目标：md2wechat `v3.1.0`，2026-07-14。
 
-## 先确认当前二进制
+## 先确认所装版本
 
 ```bash
 md2wechat version --json
@@ -19,9 +19,9 @@ md2wechat skills read md2wechat --json
 | `md2wechat config check` | `md2wechat config validate --json` | 配置文件结构检查 |
 | 无统一本地诊断 | `md2wechat doctor --json` | 本地检查配置、主题、排版目录和凭证存在性 |
 | 依赖 README 猜能力 | `md2wechat capabilities --json` | 读取机器可读能力 |
-| 读取外部 Skill 副本 | `md2wechat skills read md2wechat --json` | 读取当前二进制内置协议 |
-| 手工查主题表 | `md2wechat themes list --json` | 使用当前主题目录 |
-| 手工复制模块示例 | `md2wechat layout show NAME --json` | 读取当前字段和示例 |
+| 读取外部 Skill 副本 | `md2wechat skills read md2wechat --json` | 读取所装二进制内置协议 |
+| 手工查主题表 | `md2wechat themes list --json` | 使用所装版本的主题目录 |
+| 手工复制模块示例 | `md2wechat layout show NAME --json` | 读取所装版本的字段和示例 |
 
 ## 草稿封面
 
@@ -63,7 +63,7 @@ md2wechat generate_infographic --article article.md --plan --json
 
 ## 主题替换
 
-以下名称来自旧文档，v3 当前目录中不存在：
+以下名称来自旧文档，v3.1.0 目录中不存在：
 
 - `minimal-dark`
 - `elegant-serif`
@@ -75,7 +75,7 @@ md2wechat generate_infographic --article article.md --plan --json
 md2wechat themes list --json
 ```
 
-可从 `minimal-*`、`elegant-*`、`focus-*` 系列选择当前存在的主题，例如 `minimal-blue`、`elegant-gold`、`focus-navy`。
+可从 `minimal-*`、`elegant-*`、`focus-*` 系列选择目录中存在的主题，例如 `minimal-blue`、`elegant-gold`、`focus-navy`。
 
 ## 数字口径
 
@@ -87,7 +87,7 @@ md2wechat themes list --json
 - 4 个可选 AI 主题
 - 48 个可选 API 主题
 
-运行 discovery 获取当前值：
+运行发现命令获取所装版本的数据：
 
 ```bash
 md2wechat capabilities --json

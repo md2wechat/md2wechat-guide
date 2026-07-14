@@ -2,7 +2,7 @@
 
 面向 md2wechat v3 的任务手册：安装 CLI，检查 Markdown，选择主题和排版语法，生成预览，并在明确授权后创建微信公众号草稿。
 
-核验基线：`v3.1.0`，2026-07-14。命令行为以上游 [md2wechat-skill](https://github.com/geekjourneyx/md2wechat-skill) 的当前 Release 和内置 Skill 为准。
+核验基线：`v3.1.0`，2026-07-14。命令行为以上游 [md2wechat-skill](https://github.com/geekjourneyx/md2wechat-skill) 的对应 Release 和内置 Skill 为准。
 
 ## 最短路径
 
@@ -37,7 +37,7 @@ md2wechat convert article.md --draft --cover cover.jpg --json
 |---|---|
 | [快速开始](01-quick-start.md) | 从安装到第一份 HTML 或微信草稿 |
 | [安装](02-installation.md) | npm、Homebrew、固定版本安装和验证 |
-| [主题](03-themes-and-styles.md) | 从当前发现结果中选择真实主题 |
+| [主题](03-themes-and-styles.md) | 从所装版本中选择可用主题 |
 | [高级排版](04-advanced-typesetting.md) | 发现、查看和验证 `:::module` 语法 |
 | [图片](05-ai-image.md) | 图片计划、直接生成、封面和信息图 |
 | [API](06-api-guide.md) | CLI 配置与稳定转换接口 |
