@@ -1,23 +1,32 @@
 # 参与 Guide 维护
 
-Guide 只保存稳定任务路径。完整 CLI 行为以上游源码、Release 和内置 Skill 为准。
+Guide 只保留用户完成任务所需的稳定路径。命令变化以固定 Release、对应源码和当前 CLI 的发现结果为依据。
 
-## 提交前准备
+## 写作要求
 
-1. 安装准备核验的稳定版本。
-2. 记录 `md2wechat version --json` 输出。
-3. 用 `--help` 或 discovery 命令核对参数。
-4. 对高级排版示例运行 `layout validate`。
-5. 删除所有凭证和未公开内容。
+- 先写用户能完成的结果，再补充版本和资料来源。
+- 示例使用当前稳定版本；旧版本只放在迁移页的历史段落。
+- 不根据平台入口推断兼容性，也不使用未经验证的“全面支持”等表述。
+- 区分 HTML 转换、素材上传、草稿创建和群发。
+- 涉及上传或草稿时，先写清目标、凭证、检查项和确认步骤。
+- 不在示例中使用真实凭证、账号或未发布内容。
 
-## Pull Request 要求
+## 提交前检查
 
-- 一个 PR 解决一个任务或一组直接相关错误。
-- 命令变更附上上游 commit、Release 或 `--help` 输出。
-- 数字附上 discovery 命令和核验日期。
-- 历史命令只写进 `08-migration-v3.md`。
-- 不加入固定产品介绍、评分、排名和推广段落。
-- 不改写上游完整命令参考，使用链接或 discovery 命令。
-- 提交前逐一打开内部链接，并复核改动涉及的命令示例。
+```bash
+node --test tests/*.test.mjs
+node scripts/check-docs.mjs
+git diff --check
+```
 
-产品代码问题请提交到 [md2wechat-skill](https://github.com/geekjourneyx/md2wechat-skill/issues)。
+同时核对改动涉及的命令：
+
+```bash
+md2wechat version --json
+md2wechat capabilities --json
+md2wechat skills read md2wechat --json
+```
+
+高级排版示例还应运行 `md2wechat layout validate --file FILE --json`。PR 需要附上固定 Release 或不可变源码链接，说明版本、数字或命令为何发生变化。
+
+产品代码问题请提交到 [md2wechat-skill Issues](https://github.com/geekjourneyx/md2wechat-skill/issues)。
