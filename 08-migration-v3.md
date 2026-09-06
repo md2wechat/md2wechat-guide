@@ -12,6 +12,7 @@ md2wechat skills read md2wechat --json
 
 不要从远端仓库复制旧 Skill；读取已安装二进制自带的操作说明，才能和实际命令保持一致。
 
+<!-- historical:start -->
 ## v3.2 到 v3.4 的变化
 
 | 版本 | 变化 | 迁移影响 |
@@ -24,6 +25,7 @@ md2wechat skills read md2wechat --json
 ## 历史基线：v3.1.0
 
 早期文档以 `v3.1.0` 为目标，当时曾记录 68 个推荐场景、53 个推荐语法名和 60 项渲染能力。它们只是历史数字，当前页面应使用 77、56、63。
+<!-- historical:end -->
 
 旧文档还可能要求全量读取目录。现在按任务使用最少的发现命令：选择主题时运行 `themes list` 和 `themes show`，编写排版模块时运行 `layout list`、`layout show`，复杂模块再用 `layout render`。
 

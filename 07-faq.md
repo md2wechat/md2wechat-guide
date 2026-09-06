@@ -68,7 +68,9 @@ API 转换成功后，`preview` 才写入转换器返回的最终 HTML。AI 模�
 md2wechat generate_cover --article article.md --plan --json
 ```
 
-`IMAGE_PLAN_READY` 表示 prompt 已准备好。宿主 Agent 还需调用自己的 Image Gen 工具并保存图片。若要让 CLI 直接生成，请配置 Provider 和 `IMAGE_API_KEY`。
+`IMAGE_PLAN_READY` 表示 prompt 已准备好。宿主 Agent 还需调用自己的 Image Gen 工具并保存图片。这条计划路径不调用图片 Provider，也不写入微信素材库。
+
+若改用不带 `--plan` 的 CLI 直接生成路径，还要配置图片 Provider 凭证和微信凭证。该路径会生成图片并上传到目标公众号的永久素材库，应先展示目标公众号和费用风险，取得明确确认后再执行。
 
 ## 创建草稿提示缺少封面
 

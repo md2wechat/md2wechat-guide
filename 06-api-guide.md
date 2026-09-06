@@ -39,7 +39,7 @@ md2wechat convert article.md \
 ```bash
 curl -X POST "https://www.md2wechat.cn/api/convert" \
   -H "Content-Type: application/json" \
-  -H "Md2wechat-API-Key: YOUR_API_KEY" \
+  -H "X-API-Key: YOUR_API_KEY" \
   -d '{
     "markdown": "# 标题\n\n这是一段正文。",
     "theme": "default",

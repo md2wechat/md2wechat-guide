@@ -30,15 +30,16 @@ md2wechat config wechat-accounts --json
 md2wechat inspect article.md \
   --draft \
   --cover cover.jpg \
+  --wechat-account ACCOUNT \
   --strict \
   --json
 ```
 
-自动化流程应读取 `data.readiness.targets` 中的草稿状态和对应 `data.readiness.blockers`。
+自动化流程应读取 `data.readiness.targets` 中的草稿状态和对应 `data.readiness.blockers`。检查和最终创建草稿必须使用同一个 `--wechat-account` 值。
 
 ## 明确确认后创建草稿
 
-在执行前向用户展示目标账号、标题、摘要、封面和即将发生的动作，并取得类似“确认在该公众号创建草稿”的明确回复。然后运行：
+在执行前向用户展示解析后的账号标识和 AppID（不要展示 Secret）、标题、摘要、封面以及即将发生的动作，并取得类似“确认在该公众号创建草稿”的明确回复。然后使用刚才检查过的同一账号运行：
 
 ```bash
 md2wechat convert article.md \

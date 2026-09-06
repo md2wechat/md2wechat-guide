@@ -15,13 +15,15 @@
 
 ## 第一次预览
 
-先按[安装与升级](02-installation.md)完成安装，并准备 Convert API 使用的 `MD2WECHAT_API_KEY`：
+先按[安装与升级](02-installation.md)完成安装，并准备 Convert API 使用的 `MD2WECHAT_API_KEY`。下面的值只是占位符，请替换为自己的 Key：
 
 ```bash
 npm install -g @geekjourneyx/md2wechat
 md2wechat version --json
 md2wechat capabilities --json
 md2wechat skills read md2wechat --json
+md2wechat config init
+export MD2WECHAT_API_KEY="replace_with_your_key"
 md2wechat doctor --json
 md2wechat inspect article.md --json
 md2wechat themes list --json
@@ -48,6 +50,8 @@ md2wechat preview article.md --theme default -o article.preview.html
 
 本指南按 md2wechat `v3.4.0`（提交 `07fdea284e71ddaf5c6b5311238d7e9c2df3b8af`）编写。这个版本提供 48 个 API 主题、77 个推荐使用场景、56 个推荐排版语法名和 63 项渲染层语法能力；这些数字代表不同维度，不能相互替换。
 
-命令细节以已安装版本的 `--help` 和发现命令为准。版本证据见 [v3.4.0 Release](https://github.com/geekjourneyx/md2wechat-skill/releases/tag/v3.4.0)，平台接入进度见 [Wiki 证据页](https://github.com/md2wechat/md2wechat-wiki/tree/main/evidence)。
+Windows PowerShell 使用 `$env:MD2WECHAT_API_KEY = "replace_with_your_key"`。不要把真实 Key 写进文章、截图或仓库。
+
+命令细节以已安装版本的 `--help` 和发现命令为准。版本证据见 [v3.4.0 Release](https://github.com/geekjourneyx/md2wechat-skill/releases/tag/v3.4.0)，平台接入进度见 [Wiki 平台证据（固定提交）](https://github.com/md2wechat/md2wechat-wiki/blob/23027229c258e0d67c81b86da0211f14f851065c/evidence/agent-platforms.json)。
 
 发现错误时，请提交 [Issue](https://github.com/md2wechat/md2wechat-guide/issues)，附上版本、完整命令和脱敏后的错误信息。

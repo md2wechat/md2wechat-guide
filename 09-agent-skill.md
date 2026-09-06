@@ -59,4 +59,4 @@ API 预览成功后才写最终 HTML；AI handoff 或失败不会创建或覆盖
 
 上传和创建草稿是另一条流程。Agent 必须先展示目标账号、封面、摘要和检查结果，取得明确确认后才能运行带 `--upload` 或 `--draft` 的命令。详情见[发布教程](10-publishing.md)。
 
-千问办公、DuMate、WorkBuddy 和豆包工作的接入验证进展，以 [Wiki 平台证据](https://github.com/md2wechat/md2wechat-wiki/tree/main/evidence) 为准；本指南不把安装入口等同于已经验证可用。
+千问办公、DuMate、WorkBuddy 和豆包工作的接入验证进展，以 [Wiki 平台证据（固定提交）](https://github.com/md2wechat/md2wechat-wiki/blob/23027229c258e0d67c81b86da0211f14f851065c/evidence/agent-platforms.json) 为准；本指南不把安装入口等同于已经验证可用。

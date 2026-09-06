@@ -23,7 +23,7 @@ md2wechat generate_cover \
   --json
 ```
 
-返回 `IMAGE_PLAN_READY` 后，Agent 读取计划中的 prompt，调用宿主提供的 Image Gen，再把图片保存到本地。此时 md2wechat 没有调用图片服务，也没有上传图片。
+返回 `IMAGE_PLAN_READY` 后，Agent 读取计划中的 prompt，调用宿主提供的 Image Gen，再把图片保存到本地。计划模式不调用图片 Provider，也不写入微信素材库。
 
 信息图同样支持计划模式：
 
@@ -35,12 +35,15 @@ md2wechat generate_infographic \
   --json
 ```
 
-## 由 CLI 直接生成
+## 由 CLI 直接生成并上传
 
-这条路径需要配置图片 Provider、模型和 `IMAGE_API_KEY`，调用可能产生费用：
+非 `--plan` 路径会调用图片 Provider 生成图片，随后把结果写入微信永久素材库。它需要图片 Provider 的凭证（如 `IMAGE_API_KEY`），也需要目标公众号的 `WECHAT_APPID` 和 `WECHAT_SECRET`；生成调用可能产生费用，上传会修改公众号素材库。
+
+先用 `doctor` 检查配置，并确认目标公众号。只有用户明确同意“生成图片并上传到该公众号素材库”后，才运行生成命令：
 
 ```bash
 md2wechat doctor --json
+md2wechat config wechat-accounts --json
 md2wechat providers list --json
 md2wechat generate_cover --article article.md --preset cover-default --aspect 21:9 --json
 ```
@@ -53,7 +56,7 @@ md2wechat generate_cover --article article.md --preset cover-default --aspect 21
 md2wechat providers show minimax --json
 ```
 
-只有发现结果表明所选模型支持主体参考图时，才使用公开可访问的 `http(s)` 人像 URL。具体参数和限制以命令输出及 `--help` 为准；本地路径或不支持的组合会在请求前失败。
+只有发现结果表明所选模型支持主体参考图时，才使用公开可访问的 `http(s)` 人像 URL。具体参数和限制以命令输出及 `--help` 为准；本地路径或不支持的组合会在请求前失败。非计划模式仍会生成并上传图片，因此同样要在确认后执行。
 
 ## 放进文章或用于封面
 
