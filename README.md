@@ -15,6 +15,8 @@
 
 ## 第一次预览
 
+先按[安装与升级](02-installation.md)完成安装，并准备 Convert API 使用的 `MD2WECHAT_API_KEY`：
+
 ```bash
 npm install -g @geekjourneyx/md2wechat
 md2wechat version --json

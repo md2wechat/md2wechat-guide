@@ -23,18 +23,22 @@ md2wechat layout show hero --json
 
 阅读 `layout show` 时，依次确认输入位置、主要 `body_format`、字段或正文规则、正式变体名称和示例。兼容字段用于旧稿迁移，不应成为新稿的默认选择。
 
-## 让 CLI 生成复杂模块
+## 让 CLI 生成模块
 
-先把模块正文放进 `module-body.md`，再运行：
+先查看模块字段，再使用 `layout render` 生成结构，避免手写时漏掉必填字段：
 
 ```bash
 md2wechat layout render hero \
-  --body-file module-body.md \
-  --param title="公众号排版的真问题" \
+  --var eyebrow=深度观察 \
+  --var title="公众号排版的真问题" \
   --json
 ```
 
-`render` 适合字段较多或正文结构复杂的模块，可以避免手写时漏掉必填字段。
+正文较长或结构复杂时，按 `layout show NAME --json` 返回的格式准备 `module-body.md`，再使用：
+
+```bash
+md2wechat layout render NAME --body-file module-body.md --json
+```
 
 ## 验证文章
 
