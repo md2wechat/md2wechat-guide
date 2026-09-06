@@ -1,25 +1,18 @@
-# 图片计划与生成
+# 为文章准备 AI 图片
 
-md2wechat v3 把图片流程分成两条路径：计划模式交给宿主 Agent 执行，直接模式调用配置的图片 Provider。
+md2wechat 提供两条图片路径：CLI 直接调用已配置的图片服务，或者用 `--plan --json` 把图片计划交给当前 Agent 的 Image Gen 工具。
 
-核验版本：`v3.1.0`，2026-07-14。
-
-## 先发现能力
+## 先查询当前能力
 
 ```bash
 md2wechat providers list --json
-md2wechat prompts list --json
-md2wechat prompts show cover-default --json
-md2wechat prompts show infographic-default --json
+md2wechat prompts list --kind image --json
+md2wechat prompts show cover-default --kind image --json
 ```
 
-v3.1.0 包含 6 个 Provider 和 32 个内置提示词。目录会变化，实际调用以发现命令输出为准。
+图片服务、模型和预设会变化，请以发现命令的结果为准。
 
-## 计划模式
-
-计划模式不要求图片 Provider 或 `IMAGE_API_KEY`，不会上传图片。它返回 `IMAGE_PLAN_READY`，由宿主 Agent 调用自己的图片工具。
-
-封面：
+## 交给宿主 Agent 生成
 
 ```bash
 md2wechat generate_cover \
@@ -30,82 +23,44 @@ md2wechat generate_cover \
   --json
 ```
 
-信息图：
+返回 `IMAGE_PLAN_READY` 后，Agent 读取计划中的 prompt，调用宿主提供的 Image Gen，再把图片保存到本地。此时 md2wechat 没有调用图片服务，也没有上传图片。
+
+信息图同样支持计划模式：
 
 ```bash
 md2wechat generate_infographic \
   --article article.md \
-  --preset infographic-default \
   --aspect 3:4 \
   --plan \
   --json
 ```
 
-宿主 Agent 应按以下顺序执行：
+## 由 CLI 直接生成
 
-1. 读取计划 JSON。
-2. 调用运行时提供的 Image Gen 工具。
-3. 保存本地图片。
-4. 将图片路径交还给后续预览或草稿命令。
-
-## 直接生成模式
-
-直接模式需要配置图片 Provider、模型和 `IMAGE_API_KEY`。命令会调用外部服务；根据配置还可能上传到微信。
-
-```bash
-md2wechat generate_cover \
-  --article article.md \
-  --preset cover-default \
-  --aspect 21:9 \
-  --json
-```
-
-通用图片：
-
-```bash
-md2wechat generate_image \
-  "一张展示 Markdown 到公众号工作流的简洁示意图" \
-  --aspect 16:9 \
-  --json
-```
-
-执行前运行：
+这条路径需要配置图片 Provider、模型和 `IMAGE_API_KEY`，调用可能产生费用：
 
 ```bash
 md2wechat doctor --json
 md2wechat providers list --json
+md2wechat generate_cover --article article.md --preset cover-default --aspect 21:9 --json
 ```
 
-## 使用封面创建草稿
+## MiniMax 主体参考图
 
-确认本地封面后：
+`v3.4.0` 增加了 MiniMax 的主体参考图能力。先查询目标 Provider 和模型是否声明支持，不要根据 Provider 名称推断：
 
 ```bash
-md2wechat inspect article.md --draft --cover cover.jpg --strict --json
-md2wechat convert article.md --draft --cover cover.jpg --json
+md2wechat providers show minimax --json
 ```
 
-`--cover` 接收已有图片路径。它不会自动生成封面。正文配图需要先生成文件，再使用标准 Markdown 图片语法引用。
+只有发现结果表明所选模型支持主体参考图时，才使用公开可访问的 `http(s)` 人像 URL。具体参数和限制以命令输出及 `--help` 为准；本地路径或不支持的组合会在请求前失败。
 
-## 正文图片
+## 放进文章或用于封面
 
-正文使用标准 Markdown 图片：
+正文图片使用标准 Markdown：
 
 ```markdown
 ![流程示意](./workflow.png)
 ```
 
-需要上传并替换图片 URL 时，先确认微信凭证和目标账号，再执行：
-
-```bash
-md2wechat inspect article.md --upload --strict --json
-md2wechat convert article.md --upload --json
-```
-
-## 安全检查
-
-- 不把图片 API Key 写进提示词、文章或日志。
-- 计划模式返回计划，不代表图片已经生成。
-- 直接模式可能产生费用，执行前确认 Provider 和模型。
-- 上传与建草稿会修改外部状态，必须取得用户授权。
-- 生成图片后检查文字错误、人物、品牌标识、版权和画幅。
+本地封面准备好后，按[发布教程](10-publishing.md)先检查账号、白名单、摘要和目标草稿，再决定是否创建草稿。

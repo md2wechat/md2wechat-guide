@@ -1,42 +1,17 @@
 # 常见问题
 
-核验版本：md2wechat `v3.1.0`，2026-07-14。
+本页对应 md2wechat `v3.4.0`。
 
-## 找不到 `md2wechat`
-
-检查：
-
-```bash
-command -v md2wechat
-```
-
-若通过固定版本安装器安装：
-
-```bash
-export PATH="$HOME/.local/bin:$PATH"
-md2wechat version --json
-```
-
-Windows 使用：
-
-```powershell
-Get-Command md2wechat
-```
-
-## 版本仍然很旧
+## 找不到命令或版本没更新
 
 ```bash
 command -v md2wechat
 md2wechat version --json
 ```
 
-确认 shell 调用路径与所用安装方式一致。升级后重新打开终端，再读取内置协议：
+Windows 使用 `Get-Command md2wechat`。确认实际路径与安装方式一致，调整 `PATH` 后重新打开终端。
 
-```bash
-md2wechat skills read md2wechat --json
-```
-
-## 配置无法通过
+## 配置检查失败
 
 ```bash
 md2wechat config show --json
@@ -44,137 +19,83 @@ md2wechat config validate --json
 md2wechat doctor --json
 ```
 
-配置优先级为环境变量、配置文件、默认值。旧环境变量可能覆盖已经修改的文件。
+环境变量的优先级高于配置文件，旧环境变量可能覆盖刚修改的配置。
 
 ## API 模式提示缺少 Key
 
-症状：`MISSING_API_KEY` 或 `MD2WECHAT_API_KEY is required`。
-
-检查：
+设置 `MD2WECHAT_API_KEY` 或配置项 `api.md2wechat_key`，再运行：
 
 ```bash
-test -n "$MD2WECHAT_API_KEY" && echo configured
 md2wechat doctor --json
+md2wechat inspect article.md --json
 ```
 
-设置 `MD2WECHAT_API_KEY`，或在配置文件中填写 `api.md2wechat_key`。不要在 Issue 中输出真实值。
+不要在 Issue 中粘贴真实 Key。
 
-## 主题不存在
+## 主题不存在或模式不匹配
 
 ```bash
 md2wechat themes list --json
 md2wechat themes show THEME_NAME --json
 ```
 
-从 discovery 输出复制主题名。v2 文档中的部分名称已经移除，迁移表见 [v3 迁移](08-migration-v3.md)。
+从当前 CLI 输出复制主题名，并按详情中的类型选择 API 或 AI 模式。
 
-## 高级排版块无法渲染
+## 高级排版无法验证
 
 ```bash
 md2wechat layout show MODULE_NAME --json
 md2wechat layout validate --file article.md --json
 ```
 
-重点检查：
+核对模块名、主要 `body_format`、必填字段、正文格式和三冒号边界。复杂模块可改用 `layout render` 生成。
 
-- 模块名是否存在
-- `body_format` 是否匹配
-- 必填字段是否齐全
-- JSON、rows、fields 等格式是否混用
-- 开始和结束标记是否都是三冒号
-
-## `--draft` 提示缺少封面
-
-草稿必须提供本地封面或现有素材 ID：
+## 怎么判断这篇文章能不能预览或发布
 
 ```bash
-md2wechat convert article.md --draft --cover cover.jpg --json
+md2wechat inspect article.md --json
 ```
 
-或：
+自动化流程读取 `data.readiness.targets` 找到目标状态，再用 `data.readiness.blockers` 定位缺少的配置、图片或封面。`doctor` 说明本机配置是否具备尝试条件；`inspect` 才针对当前文章和目标给出判断。
 
-```bash
-md2wechat convert article.md --draft --cover-media-id MEDIA_ID --json
-```
+## 预览失败后输出文件怎样处理
 
-## 微信凭证缺失
+API 转换成功后，`preview` 才写入转换器返回的最终 HTML。AI 模式返回 `PREVIEW_ACTION_REQUIRED`，API 失败时也不会新建或覆盖目标文件，因此可以保留上一次成功产物用于比较。
 
-症状：`WECHAT_APPID is required`、`WECHAT_SECRET is required`。
-
-检查：
-
-```bash
-md2wechat doctor --json
-md2wechat config wechat-accounts --json
-```
-
-配置 `WECHAT_APPID` 与 `WECHAT_SECRET`，或使用配置文件中的 `wechat` 字段。日志和 Issue 必须脱敏。
-
-## 多公众号账号无法执行副作用
-
-```bash
-md2wechat config wechat-accounts --json
-md2wechat inspect article.md --draft --cover cover.jpg --wechat-account ACCOUNT --strict --json
-```
-
-命名账号执行上传或草稿操作时需要有效的 `MD2WECHAT_API_KEY`。先确认账号名和默认账号解析结果。
-
-## 微信提示 IP 不在白名单
-
-先确认运行机器的公网出口 IP，并把它加入微信后台白名单。家庭网络、动态云环境和普通 CI 的出口可能变化。
-
-已开通固定出口服务时，使用服务方提供的完整 URL：
-
-```yaml
-wechat:
-  proxy_url: "https://wechat-egress-url-provided-by-service.example"
-```
-
-也可以临时设置：
-
-```bash
-export WECHAT_PROXY_URL="https://wechat-egress-url-provided-by-service.example"
-```
-
-该配置只影响微信上传、草稿和图片消息等副作用。启用后需要有效的 `MD2WECHAT_API_KEY`。微信后台白名单填写服务方提供的出口 IP，不自行猜测代理端口或地址。
-
-## 图片计划没有生成图片
-
-`--plan --json` 返回 `IMAGE_PLAN_READY`，输出供宿主 Agent 使用。宿主 Agent 仍需调用自己的 Image Gen 工具并保存文件。
+## 图片计划为什么没有图片
 
 ```bash
 md2wechat generate_cover --article article.md --plan --json
 ```
 
-## 直接图片生成失败
+`IMAGE_PLAN_READY` 表示 prompt 已准备好。宿主 Agent 还需调用自己的 Image Gen 工具并保存图片。若要让 CLI 直接生成，请配置 Provider 和 `IMAGE_API_KEY`。
+
+## 创建草稿提示缺少封面
+
+先检查目标：
 
 ```bash
-md2wechat providers list --json
-md2wechat prompts list --json
-md2wechat doctor --json
+md2wechat inspect article.md --draft --cover cover.jpg --strict --json
 ```
 
-检查 Provider、模型和 `IMAGE_API_KEY`。直接模式会调用外部服务，可能产生费用。
-
-## 如何只检查，不创建草稿
+确认后执行：
 
 ```bash
-md2wechat inspect article.md --json
-md2wechat advise article.md --json
-md2wechat layout validate --file article.md --json
-md2wechat preview article.md -o article.preview.html
+md2wechat convert article.md --draft --cover cover.jpg --json
 ```
 
-`inspect`、`advise`、`layout validate` 和 `preview` 不创建微信草稿。`doctor` 也不调用远程 API。
+已有素材 ID 时可改用 `--cover-media-id MEDIA_ID`；两种封面参数不能同时使用。
 
-## 如何报告问题
+## 微信提示 IP 不在白名单
 
-在 [Guide Issues](https://github.com/md2wechat/md2wechat-guide/issues) 提供：
+确认运行机器的公网出口 IP，并加入微信公众平台白名单。动态网络或普通 CI 的出口可能变化。使用固定出口服务时，按服务方提供的完整 URL 配置 `wechat.proxy_url` 或 `WECHAT_PROXY_URL`，不要猜测地址和端口。
+
+## 报告问题时提供什么
 
 - `md2wechat version --json`
 - 操作系统和安装方式
-- 脱敏命令与错误码
+- 脱敏后的完整命令与错误码
 - 可以公开的最小 Markdown 示例
 - 已执行的检查命令
 
-删除 AppID、AppSecret、API Key、Cookie、Token 和未发布正文。
+删除 AppID、AppSecret、API Key、Cookie、Token 和未发布正文后，再到 [Guide Issues](https://github.com/md2wechat/md2wechat-guide/issues) 提交。

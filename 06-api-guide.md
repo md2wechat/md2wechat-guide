@@ -1,25 +1,20 @@
-# API 接入
+# 接入 Convert API
 
-公开稳定转换接口：`POST https://www.md2wechat.cn/api/convert`。
+Convert API 把 Markdown 转成公众号 HTML。稳定接口是：
 
-核验来源：[md2wechat API 文档](https://www.md2wechat.cn/api-docs)，2026-07-14。接口、鉴权和价格发生变化时，以该页面为准。
+```text
+POST https://www.md2wechat.cn/api/convert
+```
+
+它不上传微信素材，也不创建公众号草稿。需要发布能力时，请使用 [Publishing API](https://md2wechat.com/api/v1) 或 CLI 的发布流程，并单独完成授权与账号检查。
 
 ## CLI 配置
 
 ```bash
 export MD2WECHAT_API_KEY="your_key"
 export MD2WECHAT_BASE_URL="https://www.md2wechat.cn"
-
 md2wechat config validate --json
 md2wechat doctor --json
-```
-
-也可以写入 `~/.config/md2wechat/config.yaml`：
-
-```yaml
-api:
-  md2wechat_key: "your_key"
-  md2wechat_base_url: "https://www.md2wechat.cn"
 ```
 
 不要把真实 Key 提交到 Git。
@@ -28,6 +23,8 @@ api:
 
 ```bash
 md2wechat themes list --json
+md2wechat themes show default --json
+md2wechat layout validate --file article.md --json
 md2wechat convert article.md \
   --mode api \
   --theme default \
@@ -51,9 +48,9 @@ curl -X POST "https://www.md2wechat.cn/api/convert" \
   }'
 ```
 
-请求前从 [主题画廊](https://www.md2wechat.cn/theme-gallery) 或 `themes list` 获取主题 ID。
+主题 ID 可从 [主题画廊](https://www.md2wechat.cn/theme-gallery) 或 `themes list --json` 获取。
 
-## 请求字段
+## 常用字段
 
 | 字段 | 必填 | 说明 |
 |---|---|---|
@@ -62,23 +59,6 @@ curl -X POST "https://www.md2wechat.cn/api/convert" \
 | `fontSize` | 否 | `small`、`medium`、`large` |
 | `backgroundType` | 否 | `default`、`grid`、`none` |
 
-## 高级排版
+## 出错时
 
-接口接受已部署渲染器支持的 `:::module` 语法。发送请求前在 CLI 中验证：
-
-```bash
-md2wechat layout validate --file article.md --json
-```
-
-## 错误定位
-
-1. 先用 `theme: default` 和最小 Markdown 请求。
-2. 检查 HTTP 状态码和响应错误码。
-3. 运行 `md2wechat config validate --json`。
-4. 运行 `md2wechat doctor --json`。
-5. 检查 Key 是否放在 `Md2wechat-API-Key` 请求头。
-6. 检查请求体字段大小写和 JSON 转义。
-
-## CI 凭证
-
-在 CI Secret 中保存 `MD2WECHAT_API_KEY`。日志只记录错误码、请求标识和脱敏环境信息，不输出请求头或完整未发布文章。
+先用 `default` 和最小 Markdown 重试，再检查 HTTP 状态码、错误码、Key 请求头以及 JSON 字段大小写。接口与鉴权详情见 [API 文档](https://www.md2wechat.cn/api-docs)。

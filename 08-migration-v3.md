@@ -1,10 +1,8 @@
-# 从 v2 迁移到 v3
+# 从早期 v3 版本迁移到 v3.4.0
 
-仅本页保留 v2 历史写法，用于定位旧脚本。Guide 其他页面只使用 v3 命令。
+本页把历史行为集中在一起，帮助你更新旧脚本。目标版本是 `v3.4.0`。
 
-核验目标：md2wechat `v3.1.0`，2026-07-14。
-
-## 先确认所装版本
+## 先确认当前命令
 
 ```bash
 md2wechat version --json
@@ -12,97 +10,48 @@ md2wechat capabilities --json
 md2wechat skills read md2wechat --json
 ```
 
-## 命令替换
+不要从远端仓库复制旧 Skill；读取已安装二进制自带的操作说明，才能和实际命令保持一致。
 
-| v2 历史写法 | v3 写法 | 说明 |
+## v3.2 到 v3.4 的变化
+
+| 版本 | 变化 | 迁移影响 |
 |---|---|---|
-| `md2wechat config check` | `md2wechat config validate --json` | 配置文件结构检查 |
-| 无统一本地诊断 | `md2wechat doctor --json` | 本地检查配置、主题、排版目录和凭证存在性 |
-| 依赖 README 猜能力 | `md2wechat capabilities --json` | 读取机器可读能力 |
-| 读取外部 Skill 副本 | `md2wechat skills read md2wechat --json` | 读取所装二进制内置协议 |
-| 手工查主题表 | `md2wechat themes list --json` | 使用所装版本的主题目录 |
-| 手工复制模块示例 | `md2wechat layout show NAME --json` | 读取所装版本的字段和示例 |
+| v3.2.0 | `capabilities` 改为聚合信息，资源详情改由 `list`、`show`、`render` 分层返回；API 预览成功才写最终 HTML；AI 预览只返回交接动作 | Discovery JSON 的资源字段形状有破坏性变化；预览流程应检查状态，不能依赖回退页面 |
+| v3.2.0 | `inspect` 的 `data.readiness.targets/blockers` 成为文章级目标判断入口 | 原有布尔字段仍保留，新 Agent 应迁移到 targets/blockers |
+| v3.3.0 | 排版目录更新为 77 个推荐场景、56 个推荐语法名和 63 项渲染能力，并明确字段读取顺序 | 现有正确模块继续可用；新稿应重新查询 `layout show`，避免沿用猜测的字段或别名 |
+| v3.4.0 | MiniMax 增加可发现的主体参考图能力 | 属于新增能力；先运行 `providers show minimax --json`，再根据所选模型的发现结果决定是否传入主体参考图 |
 
-## 草稿封面
+## 历史基线：v3.1.0
 
-历史脚本可能只有：
+早期文档以 `v3.1.0` 为目标，当时曾记录 68 个推荐场景、53 个推荐语法名和 60 项渲染能力。它们只是历史数字，当前页面应使用 77、56、63。
+
+旧文档还可能要求全量读取目录。现在按任务使用最少的发现命令：选择主题时运行 `themes list` 和 `themes show`，编写排版模块时运行 `layout list`、`layout show`，复杂模块再用 `layout render`。
+
+## 旧命令替换
+
+| 历史写法 | 当前写法 |
+|---|---|
+| `md2wechat config check` | `md2wechat config validate --json` |
+| 依赖 README 猜能力 | `md2wechat capabilities --json` |
+| 读取远端 Skill 副本 | `md2wechat skills read md2wechat --json` |
+| 手工维护主题表 | `md2wechat themes list --json` |
+| 手工复制模块字段 | `md2wechat layout show NAME --json` |
+
+历史脚本中的 `convert --draft` 如果没有封面，需要改为：
 
 ```bash
-md2wechat convert article.md --draft
-```
-
-v3 草稿需要显式封面：
-
-```bash
+md2wechat inspect article.md --draft --cover cover.jpg --strict --json
 md2wechat convert article.md --draft --cover cover.jpg --json
 ```
 
-已有素材 ID：
-
-```bash
-md2wechat convert article.md --draft --cover-media-id MEDIA_ID --json
-```
-
-## 图片参数
-
-历史文档曾使用 `--images`，v3 的 `convert` 没有该参数。
-
-封面计划：
-
-```bash
-md2wechat generate_cover --article article.md --plan --json
-```
-
-信息图计划：
-
-```bash
-md2wechat generate_infographic --article article.md --plan --json
-```
-
-宿主 Agent 生成图片并保存后，把封面路径传给 `--cover`；正文图片使用标准 Markdown 图片语法。
-
-## 主题替换
-
-以下名称来自旧文档，v3.1.0 目录中不存在：
-
-- `minimal-dark`
-- `elegant-serif`
-- `focus-mono`
-
-运行：
-
-```bash
-md2wechat themes list --json
-```
-
-可从 `minimal-*`、`elegant-*`、`focus-*` 系列选择目录中存在的主题，例如 `minimal-blue`、`elegant-gold`、`focus-navy`。
-
-## 数字口径
-
-旧文档使用过“43 个模块”和“3 个 AI 主题”。v3.1.0 的发现结果为：
-
-- 68 个主推场景条目
-- 53 个主推语法名
-- 60 项渲染语法能力
-- 4 个可选 AI 主题
-- 48 个可选 API 主题
-
-运行发现命令获取所装版本的数据：
-
-```bash
-md2wechat capabilities --json
-md2wechat themes list --json
-md2wechat layout list --json
-```
-
-## 迁移检查
+## 完成迁移后的检查
 
 ```bash
 md2wechat config validate --json
 md2wechat doctor --json
-md2wechat layout validate --file article.md --json
 md2wechat inspect article.md --json
+md2wechat layout validate --file article.md --json
 md2wechat preview article.md -o article.preview.html
 ```
 
-完成预览后再决定是否转换、上传或创建草稿。
+确认预览后，再决定是否上传素材或创建草稿。

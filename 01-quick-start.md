@@ -1,8 +1,6 @@
-# 快速开始
+# 快速开始：生成第一份公众号 HTML
 
-目标：生成一份可检查的微信 HTML。创建公众号草稿属于可选步骤。
-
-核验版本：md2wechat `v3.1.0`，2026-07-14。
+这条路径先生成可检查的本地 HTML，不上传素材，也不创建公众号草稿。
 
 ## 1. 安装并确认版本
 
@@ -13,50 +11,38 @@ md2wechat capabilities --json
 md2wechat skills read md2wechat --json
 ```
 
-`skills read` 读取所装二进制内置的 Agent 操作协议，不需要联网获取另一份 Skill 文件。
+本指南对应 `v3.4.0`。`skills read` 读取当前二进制内置的操作说明，不需要下载远端 Skill 文件。
 
-## 2. 初始化配置
+## 2. 检查配置
 
 ```bash
 md2wechat config init
-md2wechat config show --json
 md2wechat config validate --json
 md2wechat doctor --json
 ```
 
-默认配置路径：
-
-```text
-~/.config/md2wechat/config.yaml
-```
-
-API 模式需要 `MD2WECHAT_API_KEY` 或配置项 `api.md2wechat_key`。创建微信草稿还需要 `WECHAT_APPID` 和 `WECHAT_SECRET`，也可以写入配置文件。
-
-不要把凭证写进文章、示例、Issue 或 Git 仓库。
+Convert API 需要 `MD2WECHAT_API_KEY`。凭证应放在环境变量或本地配置中，不要写进文章、日志或 Git 仓库。
 
 ## 3. 准备文章
 
-创建 `article.md`：
+新建 `article.md`：
 
 ```markdown
 ---
 title: 第一次使用 md2wechat
 author: 你的名字
-digest: 从检查到预览的最短流程
+digest: 从 Markdown 到公众号 HTML
 ---
 
 # 第一次使用 md2wechat
 
 这是一段正文。
 
-## 要点
-
-- 先检查
-- 再预览
-- 确认后转换
+- 先检查文章
+- 再生成预览
 ```
 
-## 4. 检查文章
+## 4. 检查文章和目标状态
 
 ```bash
 md2wechat inspect article.md --json
@@ -64,17 +50,7 @@ md2wechat advise article.md --json
 md2wechat layout validate --file article.md --json
 ```
 
-- `inspect` 返回解析后的标题、摘要和发布准备度。
-- `advise` 给出确定性的改进建议，不修改文件。
-- `layout validate` 检查高级排版块的字段和结构。
-
-需要把检查错误用于 CI 时：
-
-```bash
-md2wechat inspect article.md --strict --json
-```
-
-发现 error 级问题时，`--strict` 使用退出码 2。
+自动化流程应读取 `inspect` 返回的 `data.readiness.targets` 和 `data.readiness.blockers`，再决定是否继续预览、转换或发布。`advise` 只给建议，不改原文。
 
 ## 5. 选择主题并预览
 
@@ -84,70 +60,16 @@ md2wechat themes show default --json
 md2wechat preview article.md --theme default -o article.preview.html
 ```
 
-打开 `article.preview.html`，检查标题、段落、代码、图片和手机宽度下的阅读效果。
+打开 `article.preview.html`，重点检查手机宽度下的标题、段落、代码、表格和图片。`preview` 只有在 API 转换成功后才写入最终 HTML；失败或 AI handoff 不会新建、清空或覆盖输出文件。
 
-## 6. 转换 HTML
+## 6. 输出正式 HTML
 
 ```bash
 md2wechat convert article.md --theme default -o article.html --json
 ```
 
-需要让转换阶段只生成预览且不上传图片：
+这里只完成排版转换。Convert API 不上传素材，也不创建公众号草稿。需要发布时，再按[发布教程](10-publishing.md)检查账号、封面和权限。
 
-```bash
-md2wechat convert article.md --preview --theme default --json
-```
+## 交给 Agent 时
 
-## 7. 可选：创建微信草稿
-
-先准备本地封面 `cover.jpg`，再按草稿目标检查：
-
-```bash
-md2wechat inspect article.md --draft --cover cover.jpg --strict --json
-```
-
-确认目标账号和副作用后执行：
-
-```bash
-md2wechat convert article.md --draft --cover cover.jpg --json
-```
-
-已有微信封面素材 ID 时，可以使用：
-
-```bash
-md2wechat convert article.md --draft --cover-media-id MEDIA_ID --json
-```
-
-`--cover` 与 `--cover-media-id` 不能同时使用。
-
-## 8. 可选：标题建议与 Brand Profile
-
-生成可交给 AI 的标题建议请求：
-
-```bash
-md2wechat title suggest article.md \
-  --target-reader "公众号创作者" \
-  --count 8 \
-  --hook-level 1 \
-  --json
-```
-
-初始化供 Agent 读取的作者资料：
-
-```bash
-md2wechat brand init
-md2wechat brand show
-```
-
-Brand Profile 位于 `~/.config/md2wechat/brand.md`。CLI 不解析其中内容，宿主 Agent 根据它理解语气、排版偏好和限制。
-
-## Agent 调用顺序
-
-```text
-version → capabilities → skills read → doctor
-→ inspect → advise → themes/layout discovery
-→ layout validate → preview → convert
-→ 用户确认后执行 upload 或 draft
-```
-
-Agent 不应在用户只要求排版、预览或检查时创建草稿。
+让 Agent 使用最少的任务相关发现命令，不必在启动时枚举所有主题、模块和图片预设。完整顺序见 [Agent 与 Skill](09-agent-skill.md)。
