@@ -29,11 +29,13 @@ export function scanDocument(file, text, existing = new Set(ROOT_DOCS)) {
   addMatches(violations, file, text, "wrong-convert-endpoint", /https:\/\/(?!www\.)md2wechat\.cn\/api\/convert/g, "Convert API 必须使用稳定地址");
   addMatches(violations, file, text, "wrong-api-key-header", /Md2wechat-API-Key/gi, "Convert API 鉴权头必须使用 X-API-Key");
   for (const sentence of text.split(/[。\n]/)) {
-    const mentionsPlatform = /千问办公|DuMate|WorkBuddy|豆包工作/i.test(sentence);
-    const assertsSupport = /支持|兼容|适配|开箱即用|可直接使用|可以直接使用|已(?:通过|完成).{0,12}(?:验证|测试)/.test(sentence);
-    const explicitlyNegated = /不|未|尚未|没有|不得|不能|并非|不应/.test(sentence);
-    if (mentionsPlatform && assertsSupport && !explicitlyNegated) {
-      violations.push({ file, line: lineNumber(text, text.indexOf(sentence)), rule: "platform-overclaim", message: "没有验证证据时不得宣称平台支持或兼容" });
+    for (const clause of sentence.split(/[，,；;]|但|而/)) {
+      const mentionsPlatform = /千问办公|DuMate|WorkBuddy|豆包工作/i.test(clause);
+      const assertsSupport = /支持|兼容|适配|开箱即用|(?:可|可以)(?:直接)?(?:使用|运行)|可用|已(?:通过|完成).{0,12}(?:验证|测试)/.test(clause);
+      const explicitlyNegated = /不|未|尚未|没有|不得|不能|并非|不应/.test(clause);
+      if (mentionsPlatform && assertsSupport && !explicitlyNegated) {
+        violations.push({ file, line: lineNumber(text, text.indexOf(clause)), rule: "platform-overclaim", message: "没有验证证据时不得宣称平台支持或兼容" });
+      }
     }
   }
   for (const sentence of text.split(/[。\n]/)) {
