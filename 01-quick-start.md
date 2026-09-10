@@ -11,7 +11,7 @@ md2wechat capabilities --json
 md2wechat skills read md2wechat --json
 ```
 
-本指南对应 `v3.4.0`。`skills read` 读取当前二进制内置的操作说明，不需要下载远端 Skill 文件。
+本指南对应 `v3.5.0`。`skills read` 读取当前二进制内置的操作说明，不需要下载远端 Skill 文件。
 
 ## 2. 检查配置
 

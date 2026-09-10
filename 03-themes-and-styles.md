@@ -7,7 +7,7 @@ md2wechat themes list --json
 md2wechat themes show default --json
 ```
 
-`v3.4.0` 提供 48 个 API 主题。主题列表以命令输出为准，不要根据系列名称自行拼接主题 ID。
+`v3.5.0` 提供 48 个 API 主题。主题列表以命令输出为准，不要根据系列名称自行拼接主题 ID。
 
 ## 从默认主题开始
 

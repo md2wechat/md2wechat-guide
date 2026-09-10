@@ -1,6 +1,6 @@
 # 安装与升级 md2wechat
 
-以下固定版本命令对应 `v3.4.0`。安装完成后都应运行 `md2wechat version --json`。
+以下固定版本命令对应 `v3.5.0`。安装完成后都应运行 `md2wechat version --json`。
 
 ## npm
 
@@ -30,7 +30,7 @@ brew upgrade md2wechat
 Linux 或 macOS：
 
 ```bash
-curl -fsSL https://github.com/geekjourneyx/md2wechat-skill/releases/download/v3.4.0/install.sh | bash
+curl -fsSL https://github.com/geekjourneyx/md2wechat-skill/releases/download/v3.5.0/install.sh | bash
 export PATH="$HOME/.local/bin:$PATH"
 md2wechat version --json
 ```
@@ -38,7 +38,7 @@ md2wechat version --json
 Windows PowerShell：
 
 ```powershell
-$env:MD2WECHAT_RELEASE_BASE_URL = "https://github.com/geekjourneyx/md2wechat-skill/releases/download/v3.4.0"
+$env:MD2WECHAT_RELEASE_BASE_URL = "https://github.com/geekjourneyx/md2wechat-skill/releases/download/v3.5.0"
 iex ((New-Object System.Net.WebClient).DownloadString("$env:MD2WECHAT_RELEASE_BASE_URL/install.ps1"))
 md2wechat version --json
 ```
@@ -46,7 +46,7 @@ md2wechat version --json
 ## Go install
 
 ```bash
-go install github.com/geekjourneyx/md2wechat-skill/cmd/md2wechat@v3.4.0
+go install github.com/geekjourneyx/md2wechat-skill/cmd/md2wechat@v3.5.0
 md2wechat version --json
 ```
 

@@ -25,7 +25,7 @@ function maskHistorical(file, text, violations) {
 export function scanDocument(file, text, existing = new Set(ROOT_DOCS)) {
   const violations = [];
   const currentText = maskHistorical(file, text, violations);
-  addMatches(violations, file, currentText, "stale-current-version", /\bv3\.[0-3](?:\.\d+)?\b|\b68 个|\b53 个|\b60 项/g, "旧版本或旧数量只能出现在明确标记的历史段落中");
+  addMatches(violations, file, currentText, "stale-current-version", /\bv3\.[0-4](?:\.\d+)?\b|\b68 个|\b53 个|\b60 项/g, "旧版本或旧数量只能出现在明确标记的历史段落中");
   addMatches(violations, file, text, "wrong-convert-endpoint", /https:\/\/(?!www\.)md2wechat\.cn\/api\/convert/g, "Convert API 必须使用稳定地址");
   addMatches(violations, file, text, "wrong-api-key-header", /Md2wechat-API-Key/gi, "Convert API 鉴权头必须使用 X-API-Key");
   for (const sentence of text.split(/[。\n]/)) {
@@ -73,9 +73,9 @@ export function validateLock(lock = readLock()) {
   const violations = [];
   const sameKeys = (value, keys) => JSON.stringify(Object.keys(value ?? {}).sort()) === JSON.stringify([...keys].sort());
   if (!sameKeys(lock, ["schemaVersion", "reviewedAt", "sources"])) violations.push("lock keys mismatch");
-  if (lock.schemaVersion !== 1 || lock.reviewedAt !== "2026-09-06") violations.push("lock metadata mismatch");
+  if (lock.schemaVersion !== 1 || lock.reviewedAt !== "2026-09-10") violations.push("lock metadata mismatch");
   const expected = {
-    runtime: ["geekjourneyx/md2wechat-skill", "VERSION", "18091983f59ddde8105e566545a0d9e4a12a4f1c", "v3.4.0"],
+    runtime: ["geekjourneyx/md2wechat-skill", "VERSION", "1545d966571dc86b54c98f888a0e6451501f8c81", "v3.5.0"],
     products: ["md2wechat/.github", "facts/product-routes.json", "9b25b7142815876f44053cf819842db320408d2a", 1],
     platforms: ["md2wechat/md2wechat-wiki", "evidence/agent-platforms.json", "474ef8b8398e9b21b79ed937e24cb3c13ce1505d", 1]
   };
@@ -98,7 +98,7 @@ export function validateRequiredContent() {
   for (const command of ["md2wechat version --json", "md2wechat capabilities --json", "md2wechat skills read md2wechat --json", "md2wechat themes list --json", "md2wechat themes show", "md2wechat layout list --json", "md2wechat layout show", "md2wechat providers show minimax --json"]) {
     if (!all.includes(command)) missing.push(command);
   }
-  if (!readme.includes("v3.4.0")) missing.push("v3.4.0");
+  if (!readme.includes("v3.5.0")) missing.push("v3.5.0");
   for (const count of ["48", "77", "56", "63"]) if (!readme.includes(`${count} 个`) && !readme.includes(`${count} 项`)) missing.push(`README count ${count}`);
   if (!all.includes("https://www.md2wechat.cn/api/convert")) missing.push("Convert API endpoint");
   if (!all.includes("X-API-Key: YOUR_API_KEY")) missing.push("X-API-Key header");
