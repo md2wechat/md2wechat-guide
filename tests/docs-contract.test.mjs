@@ -7,7 +7,7 @@ test("current docs contain no stale version or count", () => {
 });
 
 test("old facts are allowed only inside explicit historical markers", () => {
-  for (const version of ["v3.0.0", "v3.1.0", "v3.2.0", "v3.3.0"]) {
+  for (const version of ["v3.0.0", "v3.1.0", "v3.2.0", "v3.3.0", "v3.4.0"]) {
     assert.equal(scanDocument("08-migration-v3.md", `当前仍是 ${version}`).some((v) => v.rule === "stale-current-version"), true);
   }
   assert.equal(scanDocument("08-migration-v3.md", "<!-- historical:start -->\nv3.1.0 有 68 个条目\n<!-- historical:end -->").length, 0);

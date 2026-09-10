@@ -48,10 +48,10 @@ md2wechat preview article.md --theme default -o article.preview.html
 
 ## 当前版本与资料来源
 
-本指南按 md2wechat `v3.4.0`（提交 `07fdea284e71ddaf5c6b5311238d7e9c2df3b8af`）编写。这个版本提供 48 个 API 主题、77 个推荐使用场景、56 个推荐排版语法名和 63 项渲染层语法能力；这些数字代表不同维度，不能相互替换。
+本指南按 md2wechat `v3.5.0`（提交 `cbc8c600ed1f9cccbc29a33576f657c07d39ba9a`）编写。这个版本提供 48 个 API 主题、77 个推荐使用场景、56 个推荐排版语法名和 63 项渲染层语法能力；这些数字代表不同维度，不能相互替换。
 
 Windows PowerShell 使用 `$env:MD2WECHAT_API_KEY = "replace_with_your_key"`。不要把真实 Key 写进文章、截图或仓库。
 
-命令细节以已安装版本的 `--help` 和发现命令为准。版本证据见 [v3.4.0 Release](https://github.com/geekjourneyx/md2wechat-skill/releases/tag/v3.4.0)，平台接入进度见 [Wiki 平台证据（固定提交）](https://github.com/md2wechat/md2wechat-wiki/blob/23027229c258e0d67c81b86da0211f14f851065c/evidence/agent-platforms.json)。
+命令细节以已安装版本的 `--help` 和发现命令为准。版本证据见 [v3.5.0 Release](https://github.com/geekjourneyx/md2wechat-skill/releases/tag/v3.5.0)，平台接入进度见 [Wiki 平台证据（固定提交）](https://github.com/md2wechat/md2wechat-wiki/blob/23027229c258e0d67c81b86da0211f14f851065c/evidence/agent-platforms.json)。
 
 发现错误时，请提交 [Issue](https://github.com/md2wechat/md2wechat-guide/issues)，附上版本、完整命令和脱敏后的错误信息。

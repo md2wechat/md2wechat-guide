@@ -12,6 +12,18 @@ md2wechat prompts show cover-default --kind image --json
 
 图片服务、模型和预设会变化，请以发现命令的结果为准。
 
+## 当前图片服务
+
+核验日期：2026-09-10。v3.5.0 包含 8 个 canonical provider：`openai`、`minimax`、`atlascloud`、`tuzi`、`modelscope`、`openrouter`、`gemini`、`volcengine`，别名不重复计数。
+
+本版本新增 Atlas Cloud；TuZi 是既有服务。Atlas Cloud 默认模型为 `openai/gpt-image-2/text-to-image`，默认尺寸为 `1024x1024`。先运行只读查询，按返回结果配置：
+
+```bash
+md2wechat providers show atlascloud --json
+```
+
+配置项和费用、凭证要求见[版本化图片服务文档](https://github.com/geekjourneyx/md2wechat-skill/blob/cbc8c600ed1f9cccbc29a33576f657c07d39ba9a/docs/IMAGE_PROVISIONERS.md)。
+
 ## 交给宿主 Agent 生成
 
 ```bash
@@ -50,7 +62,7 @@ md2wechat generate_cover --article article.md --preset cover-default --aspect 21
 
 ## MiniMax 主体参考图
 
-`v3.4.0` 增加了 MiniMax 的主体参考图能力。先查询目标 Provider 和模型是否声明支持，不要根据 Provider 名称推断：
+MiniMax 提供主体参考图能力。先查询目标 Provider 和模型是否声明支持，不要根据 Provider 名称推断：
 
 ```bash
 md2wechat providers show minimax --json
