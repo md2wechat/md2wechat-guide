@@ -11,6 +11,7 @@
 | 让 Agent 调用 md2wechat | [Agent 与 Skill](09-agent-skill.md) |
 | 接入 Markdown 转换接口 | [Convert API](06-api-guide.md) |
 | 上传素材或创建公众号草稿 | [发布到微信公众号](10-publishing.md) |
+| 保存到知乎、CSDN、头条未发布草稿 | [多平台草稿](11-multi-platform.md) |
 | 排查安装、配置和预览问题 | [常见问题](07-faq.md) |
 
 ## 第一次预览
@@ -45,13 +46,14 @@ md2wechat preview article.md --theme default -o article.preview.html
 8. [从旧版迁移](08-migration-v3.md)
 9. [Agent 与 Skill](09-agent-skill.md)
 10. [发布到微信公众号](10-publishing.md)
+11. [多平台草稿](11-multi-platform.md)
 
 ## 当前版本与资料来源
 
-本指南按 md2wechat `v3.5.0`（提交 `cbc8c600ed1f9cccbc29a33576f657c07d39ba9a`）编写。这个版本提供 48 个 API 主题、77 个推荐使用场景、56 个推荐排版语法名和 63 项渲染层语法能力；这些数字代表不同维度，不能相互替换。
+本指南按 md2wechat `v3.6.0`（提交 `9cb3318f84ff980d1cac41ab0fafbcec525ef6dd`）编写。这个版本提供 48 个 API 主题、77 个推荐使用场景、56 个推荐排版语法名和 63 项渲染层语法能力；这些数字代表不同维度，不能相互替换。
 
 Windows PowerShell 使用 `$env:MD2WECHAT_API_KEY = "replace_with_your_key"`。不要把真实 Key 写进文章、截图或仓库。
 
-命令细节以已安装版本的 `--help` 和发现命令为准。版本证据见 [v3.5.0 Release](https://github.com/geekjourneyx/md2wechat-skill/releases/tag/v3.5.0)，平台接入进度见 [Wiki 平台证据（固定提交）](https://github.com/md2wechat/md2wechat-wiki/blob/23027229c258e0d67c81b86da0211f14f851065c/evidence/agent-platforms.json)。
+命令细节以已安装版本的 `--help` 和发现命令为准。版本证据见 [v3.6.0 Release](https://github.com/geekjourneyx/md2wechat-skill/releases/tag/v3.6.0)，平台接入进度见 [Wiki 平台证据（固定提交）](https://github.com/md2wechat/md2wechat-wiki/blob/23027229c258e0d67c81b86da0211f14f851065c/evidence/agent-platforms.json)。
 
 发现错误时，请提交 [Issue](https://github.com/md2wechat/md2wechat-guide/issues)，附上版本、完整命令和脱敏后的错误信息。
