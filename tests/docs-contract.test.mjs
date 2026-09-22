@@ -32,9 +32,11 @@ test("platform compatibility is not overclaimed", () => {
   assert.equal(mixed.length, 1);
 });
 
-test("wrong API header is rejected", () => {
-  assert.equal(scanDocument("fixture.md", "Md2wechat-API-Key: secret").some((v) => v.rule === "wrong-api-key-header"), true);
-  assert.equal(scanDocument("fixture.md", "X-API-Key: secret").some((v) => v.rule === "wrong-api-key-header"), false);
+test("supported Convert API authentication headers are accepted", () => {
+  for (const header of ["Md2wechat-API-Key", "X-API-Key", "md2wechat-api-key", "x-api-key"]) {
+    const example = `curl -X POST "https://www.md2wechat.cn/api/convert" -H "${header}: YOUR_API_KEY"`;
+    assert.deepEqual(scanDocument("fixture.md", example), [], header);
+  }
 });
 
 test("Markdown fences and local links are valid", () => {

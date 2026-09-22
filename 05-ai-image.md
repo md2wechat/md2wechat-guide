@@ -16,7 +16,7 @@ md2wechat prompts show cover-default --kind image --json
 
 核验日期：2026-09-14。v3.6.0 包含 8 个 canonical provider：`openai`、`minimax`、`atlascloud`、`tuzi`、`modelscope`、`openrouter`、`gemini`、`volcengine`，别名不重复计数。
 
-本版本新增 Atlas Cloud；TuZi 是既有服务。Atlas Cloud 默认模型为 `openai/gpt-image-2/text-to-image`，默认尺寸为 `1024x1024`。先运行只读查询，按返回结果配置：
+Atlas Cloud 和 TuZi 均为既有服务；Atlas Cloud 的首次加入版本见[迁移页的历史更新记录](08-migration-v3.md#v350-更新)。Atlas Cloud 默认模型为 `openai/gpt-image-2/text-to-image`，默认尺寸为 `1024x1024`。先运行只读查询，按返回结果配置：
 
 ```bash
 md2wechat providers show atlascloud --json

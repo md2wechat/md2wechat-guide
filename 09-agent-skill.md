@@ -1,62 +1,97 @@
-# 让 Agent 使用 md2wechat
+# 让办公 Agent 使用 md2wechat
 
-这条流程适用于能够运行本地命令的 Agent。不同宿主的安装入口和权限可能不同，先确认宿主能安装 Skill、调用 CLI，并能把输出文件交还给你。
+千问办公、DuMate、WorkBuddy、豆包工作，以及其他办公 Agent，都可以走同一条本机 CLI 路径。前提是 Agent 能在你的电脑上执行终端命令：在这个环境安装 md2wechat，再把操作手册和任务交给 Agent 即可。使用这条路径无需先安装平台专用 Skill 包。
 
-## 1. 安装并读取当前协议
+## 1. 把这段安装提示词发给 Agent
 
-先按[安装教程](02-installation.md)安装 CLI，再运行：
+复制下面整段，发送到你正在使用的办公 Agent：
 
-```bash
+```text
+帮我在当前电脑安装 md2wechat，执行：
+
+npm install -g @geekjourneyx/md2wechat
+
+如果没有初始化配置，请执行：
+
+md2wechat config init
+
+已有配置请保留。如果当前环境没有 npm，请先帮我完成 Node.js / npm 的安装。
+
+安装完成后，执行以下命令，确认版本并读取当前操作说明：
+
 md2wechat version --json
 md2wechat skills read md2wechat --json
+
+给 Agent 的操作手册：
+https://www.md2wechat.cn/docs/md2wechat/skill
+
+md2wechat CLI 使用手册：
+https://www.md2wechat.cn/docs/md2wechat
+
+网页版文档：
+https://www.md2wechat.cn/docs
+
+告诉我安装结果，以及开始排版前还需要配置什么。
 ```
 
-`skills read` 返回当前二进制内置的操作说明。不要让 Agent 下载远端旧副本。
+如果 Agent 的命令运行在远程环境或独立沙箱中，需要在它实际执行命令的环境安装。其他安装方式见[安装教程](02-installation.md)。
 
-## 2. 只查询当前任务需要的能力
+初始化会生成配置，高级排版还需配置有效的 md2wechat API Key；安装完成不等于已经开通 API。配置步骤见[首次使用](01-quick-start.md)。
+
+## 2. 把文章和排版要求交给 Agent
+
+先看[高级排版模块与真实样例](https://www.md2wechat.cn/features)，挑选适合文章内容的表达方式，再把文章和下面这段要求一起发给 Agent：
+
+```text
+请用 md2wechat 为我提供的文章排版。
+
+先读取当前安装版本的操作说明，并参考高级排版样例：
+https://www.md2wechat.cn/features
+
+保留原文的观点、事实和引用，按内容需要选择主题和高级排版模块。
+请将排版稿另存为新文件，生成预览供我查看，并告诉我保存位置。
+如果缺少 API Key 或其他必要配置，先指导我在本机完成配置。
+本次只做排版和预览，不上传图片、不创建草稿、不公开发布。
+```
+
+更多说明：
+
+- [高级排版教程](04-advanced-typesetting.md)：主题、模块和字段的使用步骤。
+- [高级排版公众号教程](https://mp.weixin.qq.com/s/im5k-SXcoHMA6Kewtnm4Fw)：阅读图文讲解。
+- [CLI 使用手册](https://www.md2wechat.cn/docs/md2wechat)：查看完整命令与配置。
+
+## 3. Agent 按当前任务读取能力
+
+当前安装版本内置的说明由 `md2wechat skills read md2wechat --json` 读取。网页版手册用于查阅，实际命令和字段以当前 CLI 返回结果为准。
+
+选择主题时查询主题，使用模块时查询对应模块，不必在每次任务开始时枚举所有能力：
 
 ```bash
 md2wechat capabilities --json
-# 选择主题时
 md2wechat themes list --json
 md2wechat themes show default --json
-# 使用高级排版时
 md2wechat layout list --json
 md2wechat layout show hero --json
 ```
 
-无需在每次任务开始时枚举所有主题、模块、Provider 和提示词。
-
-## 3. 检查环境和文章
+检查环境和文章：
 
 ```bash
 md2wechat doctor --json
 md2wechat inspect article.md --json
 ```
 
-Agent 应使用 `inspect` 的 `data.readiness.targets` 和 `data.readiness.blockers` 判断目标是否可以继续，不能只根据命令退出码猜测发布条件。
-
-## 4. 生成临时排版稿
-
-让 Agent 保持原文只读，把加入排版模块后的内容写进临时文件，例如 `article.formatted.md`。复杂模块先用 `layout render` 生成，再验证：
+Agent 根据检查结果补齐当前任务所需配置。加入模块后的排版稿另存为新文件，再验证并预览：
 
 ```bash
 md2wechat layout validate --file article.formatted.md --json
-```
-
-把排版稿保存到原文附近前，应先询问用户。
-
-## 5. 预览或转换
-
-```bash
 md2wechat preview article.formatted.md --theme default -o article.preview.html
-md2wechat convert article.formatted.md --theme default -o article.html --json
 ```
 
-API 预览成功后才写最终 HTML；AI handoff 或失败不会创建或覆盖输出。Convert API 只完成排版，不创建微信草稿。
+API 预览成功后才写出 HTML；AI 模式要求后续处理或执行失败时，不应把结果当作已经完成的预览。转换接口只完成排版，不创建微信草稿。
 
-## 6. 需要发布时再次确认
+## 4. 需要图片或草稿时，再说明具体任务
 
-上传和创建草稿是另一条流程。Agent 必须先展示目标账号、封面、摘要和检查结果，取得明确确认后才能运行带 `--upload` 或 `--draft` 的命令。详情见[发布教程](10-publishing.md)。
+图片任务见[图片教程](05-ai-image.md)。公众号草稿任务见[发布教程](10-publishing.md)，知乎、CSDN、头条草稿任务见[多平台教程](11-multi-platform.md)。上传、生成图片和保存草稿按你明确提出的任务执行；保存草稿不等于公开发布。
 
-千问办公、DuMate、WorkBuddy 和豆包工作的接入验证进展，以 [Wiki 平台证据（固定提交）](https://github.com/md2wechat/md2wechat-wiki/blob/23027229c258e0d67c81b86da0211f14f851065c/evidence/agent-platforms.json) 为准；本指南不把安装入口等同于已经验证可用。
+维护者记录的各平台实测进度见 [Wiki 平台证据](https://github.com/md2wechat/md2wechat-wiki/blob/23027229c258e0d67c81b86da0211f14f851065c/evidence/agent-platforms.json)。这些记录说明已做过哪些验证，不是使用上述本机 CLI 路径的安装步骤。

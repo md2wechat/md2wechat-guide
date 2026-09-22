@@ -8,7 +8,7 @@
 |---|---|
 | 安装并生成第一份 HTML | [快速开始](01-quick-start.md) |
 | 选择主题或高级排版 | [主题与样式](03-themes-and-styles.md)、[高级排版](04-advanced-typesetting.md) |
-| 让 Agent 调用 md2wechat | [Agent 与 Skill](09-agent-skill.md) |
+| 让办公 Agent 安装并使用 md2wechat | [复制安装与排版提示词](09-agent-skill.md) |
 | 接入 Markdown 转换接口 | [Convert API](06-api-guide.md) |
 | 上传素材或创建公众号草稿 | [发布到微信公众号](10-publishing.md) |
 | 保存到知乎、CSDN、头条未发布草稿 | [多平台草稿](11-multi-platform.md) |

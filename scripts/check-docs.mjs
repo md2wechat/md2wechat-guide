@@ -27,7 +27,6 @@ export function scanDocument(file, text, existing = new Set(ROOT_DOCS)) {
   const currentText = maskHistorical(file, text, violations);
   addMatches(violations, file, currentText, "stale-current-version", /\bv3\.[0-5](?:\.\d+)?\b|\b68 个|\b53 个|\b60 项/g, "旧版本或旧数量只能出现在明确标记的历史段落中");
   addMatches(violations, file, text, "wrong-convert-endpoint", /https:\/\/(?!www\.)md2wechat\.cn\/api\/convert/g, "Convert API 必须使用稳定地址");
-  addMatches(violations, file, text, "wrong-api-key-header", /Md2wechat-API-Key/gi, "Convert API 鉴权头必须使用 X-API-Key");
   for (const sentence of text.split(/[。\n]/)) {
     for (const clause of sentence.split(/[，,；;]|但|而/)) {
       const mentionsPlatform = /千问办公|DuMate|WorkBuddy|豆包工作/i.test(clause);

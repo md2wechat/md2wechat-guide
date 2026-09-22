@@ -36,6 +36,8 @@ md2wechat convert article.md \
 
 ## HTTP 请求
 
+以下示例使用 `X-API-Key`。也可以使用官网示例中的 `Md2wechat-API-Key`，两种请求头均受支持；一次请求选用一种即可。
+
 ```bash
 curl -X POST "https://www.md2wechat.cn/api/convert" \
   -H "Content-Type: application/json" \
