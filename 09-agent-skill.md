@@ -90,8 +90,19 @@ md2wechat preview article.formatted.md --theme default -o article.preview.html
 
 API 预览成功后才写出 HTML；AI 模式要求后续处理或执行失败时，不应把结果当作已经完成的预览。转换接口只完成排版，不创建微信草稿。
 
-## 4. 需要图片或草稿时，再说明具体任务
+## 4. 需要定向产品写作时
 
-图片任务见[图片教程](05-ai-image.md)。公众号草稿任务见[发布教程](10-publishing.md)，知乎、CSDN、头条草稿任务见[多平台教程](11-multi-platform.md)。上传、生成图片和保存草稿按你明确提出的任务执行；保存草稿不等于公开发布。
+从 v3.7.0 起，可以把产品资料和目标读者交给 Agent，让它按百科式或平台表达撰写新稿。先确认当前安装版本包含内置指引：
+
+```bash
+md2wechat version --json
+md2wechat skills read md2wechat references/writing/workflow.md --json
+```
+
+只排版时保持原文，不自动改写；要求定向写作时，先核对来源、事实和缺失材料。指定 ChatGPT、豆包等目标不等于调用这些模型或获得专属排序规则，也不保证收录、引用或转化。百科词条只准备草稿，不自动提交。完整范围见[上游写作指南](https://github.com/geekjourneyx/md2wechat-skill/blob/v3.7.0/docs/WRITING.md)。
+
+## 5. 需要图片或草稿时，再说明具体任务
+
+图片任务见[图片教程](05-ai-image.md)。公众号草稿任务见[发布教程](10-publishing.md)，知乎、CSDN、头条、腾讯云开发者社区草稿任务见[多平台教程](11-multi-platform.md)。上传、生成图片和保存草稿按你明确提出的任务执行；保存草稿不等于公开发布。
 
 维护者记录的各平台实测进度见 [Wiki 平台证据](https://github.com/md2wechat/md2wechat-wiki/blob/23027229c258e0d67c81b86da0211f14f851065c/evidence/agent-platforms.json)。这些记录说明已做过哪些验证，不是使用上述本机 CLI 路径的安装步骤。
