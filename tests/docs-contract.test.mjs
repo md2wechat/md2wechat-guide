@@ -7,7 +7,7 @@ test("current docs contain no stale version or count", () => {
 });
 
 test("old facts are allowed only inside explicit historical markers", () => {
-  for (const version of ["v3.0.0", "v3.1.0", "v3.2.0", "v3.3.0", "v3.4.0"]) {
+  for (const version of ["v3.0.0", "v3.1.0", "v3.2.0", "v3.3.0", "v3.4.0", "v3.5.0"]) {
     assert.equal(scanDocument("08-migration-v3.md", `当前仍是 ${version}`).some((v) => v.rule === "stale-current-version"), true);
   }
   assert.equal(scanDocument("08-migration-v3.md", "<!-- historical:start -->\nv3.1.0 有 68 个条目\n<!-- historical:end -->").length, 0);
@@ -32,9 +32,11 @@ test("platform compatibility is not overclaimed", () => {
   assert.equal(mixed.length, 1);
 });
 
-test("wrong API header is rejected", () => {
-  assert.equal(scanDocument("fixture.md", "Md2wechat-API-Key: secret").some((v) => v.rule === "wrong-api-key-header"), true);
-  assert.equal(scanDocument("fixture.md", "X-API-Key: secret").some((v) => v.rule === "wrong-api-key-header"), false);
+test("supported Convert API authentication headers are accepted", () => {
+  for (const header of ["Md2wechat-API-Key", "X-API-Key", "md2wechat-api-key", "x-api-key"]) {
+    const example = `curl -X POST "https://www.md2wechat.cn/api/convert" -H "${header}: YOUR_API_KEY"`;
+    assert.deepEqual(scanDocument("fixture.md", example), [], header);
+  }
 });
 
 test("Markdown fences and local links are valid", () => {
