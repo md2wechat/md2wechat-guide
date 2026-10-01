@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import fs from "node:fs";
 import { readLock, scanDocs, scanDocument, validateLock, validateRequiredContent } from "../scripts/check-docs.mjs";
 
 test("current docs contain no stale version or count", () => {
@@ -56,4 +57,13 @@ test("Guide pins each authority to the reviewed immutable source", () => {
   assert.deepEqual(validateLock(), []);
   assert.equal(validateLock({ ...lock, unexpected: true }).includes("lock keys mismatch"), true);
   assert.equal(validateLock({ ...lock, sources: { ...lock.sources, runtime: { ...lock.sources.runtime, unexpected: true } } }).includes("runtime keys mismatch"), true);
+});
+
+test("Guide presents the current v3.8 layout facts", () => {
+  const readme = fs.readFileSync(new URL("../README.md", import.meta.url), "utf8");
+  assert.match(readme, /v3\.8\.0/);
+  for (const fact of ["48 个 API 主题", "83 个推荐使用场景", "59 个推荐排版语法名", "65 项渲染层语法能力"]) {
+    assert.match(readme, new RegExp(fact));
+  }
+  assert.match(readme, /微信[^。\n]*交互[^。\n]*尚未验证/);
 });

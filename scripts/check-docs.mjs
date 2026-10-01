@@ -72,9 +72,9 @@ export function validateLock(lock = readLock()) {
   const violations = [];
   const sameKeys = (value, keys) => JSON.stringify(Object.keys(value ?? {}).sort()) === JSON.stringify([...keys].sort());
   if (!sameKeys(lock, ["schemaVersion", "reviewedAt", "sources"])) violations.push("lock keys mismatch");
-  if (lock.schemaVersion !== 1 || lock.reviewedAt !== "2026-09-14") violations.push("lock metadata mismatch");
+  if (lock.schemaVersion !== 1 || lock.reviewedAt !== "2026-10-01") violations.push("lock metadata mismatch");
   const expected = {
-    runtime: ["geekjourneyx/md2wechat-skill", "VERSION", "40c341bdcdbe83bbbda981fa85368c0e1a63d0c7", "v3.6.0"],
+    runtime: ["geekjourneyx/md2wechat-skill", "VERSION", "19811903a7f7584d7aa752ea29bbf9d74cf78b47", "v3.8.0"],
     products: ["md2wechat/.github", "facts/product-routes.json", "9b25b7142815876f44053cf819842db320408d2a", 1],
     platforms: ["md2wechat/md2wechat-wiki", "evidence/agent-platforms.json", "474ef8b8398e9b21b79ed937e24cb3c13ce1505d", 1]
   };
@@ -97,8 +97,8 @@ export function validateRequiredContent() {
   for (const command of ["md2wechat version --json", "md2wechat capabilities --json", "md2wechat skills read md2wechat --json", "md2wechat themes list --json", "md2wechat themes show", "md2wechat layout list --json", "md2wechat layout show", "md2wechat providers show minimax --json"]) {
     if (!all.includes(command)) missing.push(command);
   }
-  if (!readme.includes("v3.6.0")) missing.push("v3.6.0");
-  for (const count of ["48", "77", "56", "63"]) if (!readme.includes(`${count} 个`) && !readme.includes(`${count} 项`)) missing.push(`README count ${count}`);
+  if (!readme.includes("v3.8.0")) missing.push("v3.8.0");
+  for (const count of ["48", "83", "59", "65"]) if (!readme.includes(`${count} 个`) && !readme.includes(`${count} 项`)) missing.push(`README count ${count}`);
   if (!all.includes("https://www.md2wechat.cn/api/convert")) missing.push("Convert API endpoint");
   if (!all.includes("X-API-Key: YOUR_API_KEY")) missing.push("X-API-Key header");
   if (!/Convert API[^。\n]*不[^。\n]*创建[^。\n]*草稿/.test(all)) missing.push("Convert API draft boundary");
