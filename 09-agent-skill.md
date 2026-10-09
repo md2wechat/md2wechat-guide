@@ -105,4 +105,4 @@ md2wechat skills read md2wechat references/writing/workflow.md --json
 
 图片任务见[图片教程](05-ai-image.md)。公众号草稿任务见[发布教程](10-publishing.md)，知乎、CSDN、头条、腾讯云开发者社区草稿任务见[多平台教程](11-multi-platform.md)。上传、生成图片和保存草稿按你明确提出的任务执行；保存草稿不等于公开发布。
 
-维护者记录的各平台实测进度见 [Wiki 平台证据](https://github.com/md2wechat/md2wechat-wiki/blob/23027229c258e0d67c81b86da0211f14f851065c/evidence/agent-platforms.json)。这些记录说明已做过哪些验证，不是使用上述本机 CLI 路径的安装步骤。
+维护者记录的各平台实测进度见 [Wiki 平台证据](https://github.com/md2wechat/md2wechat-wiki/blob/8f5efade60116ee2b6cd1f2bb10fee685b0ff967/evidence/agent-platforms.json)。这些记录说明已做过哪些验证，不是使用上述本机 CLI 路径的安装步骤。

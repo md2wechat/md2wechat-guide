@@ -56,6 +56,6 @@ md2wechat preview article.md --theme default -o article.preview.html
 
 Windows PowerShell 使用 `$env:MD2WECHAT_API_KEY = "replace_with_your_key"`。不要把真实 Key 写进文章、截图或仓库。
 
-命令细节以已安装版本的 `--help` 和发现命令为准。当前能力见 [v3.8.0 Release](https://github.com/geekjourneyx/md2wechat-skill/releases/tag/v3.8.0)、[排版文档](https://github.com/geekjourneyx/md2wechat-skill/blob/v3.8.0/docs/LAYOUT.md)与[写作指引](https://github.com/geekjourneyx/md2wechat-skill/blob/v3.8.0/docs/WRITING.md)；平台接入进度见 [Wiki 平台证据（固定提交）](https://github.com/md2wechat/md2wechat-wiki/blob/23027229c258e0d67c81b86da0211f14f851065c/evidence/agent-platforms.json)。
+命令细节以已安装版本的 `--help` 和发现命令为准。当前能力见 [v3.8.0 Release](https://github.com/geekjourneyx/md2wechat-skill/releases/tag/v3.8.0)、[排版文档](https://github.com/geekjourneyx/md2wechat-skill/blob/v3.8.0/docs/LAYOUT.md)与[写作指引](https://github.com/geekjourneyx/md2wechat-skill/blob/v3.8.0/docs/WRITING.md)；平台接入进度见 [Wiki 平台证据（固定提交）](https://github.com/md2wechat/md2wechat-wiki/blob/8f5efade60116ee2b6cd1f2bb10fee685b0ff967/evidence/agent-platforms.json)。
 
 发现错误时，请提交 [Issue](https://github.com/md2wechat/md2wechat-guide/issues)，附上版本、完整命令和脱敏后的错误信息。

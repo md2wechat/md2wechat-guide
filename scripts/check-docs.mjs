@@ -72,11 +72,11 @@ export function validateLock(lock = readLock()) {
   const violations = [];
   const sameKeys = (value, keys) => JSON.stringify(Object.keys(value ?? {}).sort()) === JSON.stringify([...keys].sort());
   if (!sameKeys(lock, ["schemaVersion", "reviewedAt", "sources"])) violations.push("lock keys mismatch");
-  if (lock.schemaVersion !== 1 || lock.reviewedAt !== "2026-10-01") violations.push("lock metadata mismatch");
+  if (lock.schemaVersion !== 1 || lock.reviewedAt !== "2026-10-09") violations.push("lock metadata mismatch");
   const expected = {
     runtime: ["geekjourneyx/md2wechat-skill", "VERSION", "19811903a7f7584d7aa752ea29bbf9d74cf78b47", "v3.8.0"],
     products: ["md2wechat/.github", "facts/product-routes.json", "9b25b7142815876f44053cf819842db320408d2a", 1],
-    platforms: ["md2wechat/md2wechat-wiki", "evidence/agent-platforms.json", "474ef8b8398e9b21b79ed937e24cb3c13ce1505d", 1]
+    platforms: ["md2wechat/md2wechat-wiki", "evidence/agent-platforms.json", "0acae95ed7d5e209232d15cb6947cfee88c22c57", 1]
   };
   if (JSON.stringify(Object.keys(lock.sources ?? {}).sort()) !== JSON.stringify(Object.keys(expected).sort())) violations.push("lock sources mismatch");
   for (const [name, values] of Object.entries(expected)) {
