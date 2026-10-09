@@ -50,12 +50,12 @@ md2wechat preview article.md --theme default -o article.preview.html
 
 ## 当前版本与资料来源
 
-当前稳定版本为 [v3.7.0](https://github.com/geekjourneyx/md2wechat-skill/releases/tag/v3.7.0)（2026-09-23）。定向产品写作由宿主 Agent 读取内置指引完成，不新增写作命令；百科词条只准备草稿，搜索收录与引用不保证。腾讯云开发者社区增加未发布草稿流程，验证范围及限制见[多平台草稿](11-multi-platform.md)。
+当前稳定版本为 [v3.8.0](https://github.com/geekjourneyx/md2wechat-skill/releases/tag/v3.8.0)（2026-09-24）。本版扩展 `cover-reveal`、`expand`、刊头变体和品牌符号；输出仍以静态内容为准，微信内点击交互尚未验证。
 
-本指南的排版能力基线源于 v3.6.0（提交 `9cb3318f84ff980d1cac41ab0fafbcec525ef6dd`），该版本提供 48 个 API 主题、77 个推荐使用场景、56 个推荐排版语法名和 63 项渲染层语法能力；这些数字代表不同维度，不能相互替换。
+本指南的排版能力基线源于 v3.8.0（提交 `fce5fa3b4494fded0bdb942d50d17485281055d6`），该版本提供 48 个 API 主题、83 个推荐使用场景、59 个推荐排版语法名和 65 项渲染层语法能力；这些数字代表不同维度，不能相互替换。
 
 Windows PowerShell 使用 `$env:MD2WECHAT_API_KEY = "replace_with_your_key"`。不要把真实 Key 写进文章、截图或仓库。
 
-命令细节以已安装版本的 `--help` 和发现命令为准。当前能力见 [v3.7.0 Release](https://github.com/geekjourneyx/md2wechat-skill/releases/tag/v3.7.0) 与[写作指引](https://github.com/geekjourneyx/md2wechat-skill/blob/v3.7.0/docs/WRITING.md)；历史排版能力的来源见 [v3.6.0 Release](https://github.com/geekjourneyx/md2wechat-skill/releases/tag/v3.6.0)，平台接入进度见 [Wiki 平台证据（固定提交）](https://github.com/md2wechat/md2wechat-wiki/blob/23027229c258e0d67c81b86da0211f14f851065c/evidence/agent-platforms.json)。
+命令细节以已安装版本的 `--help` 和发现命令为准。当前能力见 [v3.8.0 Release](https://github.com/geekjourneyx/md2wechat-skill/releases/tag/v3.8.0)、[排版文档](https://github.com/geekjourneyx/md2wechat-skill/blob/v3.8.0/docs/LAYOUT.md)与[写作指引](https://github.com/geekjourneyx/md2wechat-skill/blob/v3.8.0/docs/WRITING.md)；平台接入进度见 [Wiki 平台证据（固定提交）](https://github.com/md2wechat/md2wechat-wiki/blob/8f5efade60116ee2b6cd1f2bb10fee685b0ff967/evidence/agent-platforms.json)。
 
 发现错误时，请提交 [Issue](https://github.com/md2wechat/md2wechat-guide/issues)，附上版本、完整命令和脱敏后的错误信息。
